@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Saved Invoices</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue: #003090;
+      --blue-deep: #002070;
+      --blue-bright: #0040b0;
+      --red: #e00010;
+      --black: #000000;
+      --ink: #111111;
+      --muted: #3d4a63;
+      --paper: #ffffff;
+      --desk: #e6edf6;
+      --line: #d5deee;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--desk);
+      color: var(--ink);
+      font-family: "Source Sans 3", "Segoe UI", sans-serif;
+    }
+
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 22px;
+      background: var(--black);
+      color: white;
+    }
+
+    .toolbar p { margin: 0; font-size: 13px; }
+
+    .toolbar-actions { display: flex; gap: 8px; }
+
+    .toolbar a,
+    .toolbar button {
+      border: 0;
+      background: var(--red);
+      color: white;
+      padding: 8px 14px;
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      font-family: inherit;
+    }
+
+    .toolbar a.ghost {
+      background: transparent;
+      box-shadow: inset 0 0 0 1px var(--blue-bright);
+    }
+
+    main {
+      width: min(860px, calc(100% - 32px));
+      margin: 28px auto 48px;
+    }
+
+    .page-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 6px;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
+      font-size: 34px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--blue-deep);
+    }
+
+    .back {
+      flex: 0 0 auto;
+      border: 0;
+      background: transparent;
+      color: var(--blue);
+      box-shadow: inset 0 0 0 1px var(--blue);
+      padding: 8px 14px;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+
+    .lede {
+      margin: 0 0 18px;
+      color: var(--muted);
+    }
+
+    .search {
+      position: relative;
+      margin-bottom: 12px;
+    }
+
+    .search label {
+      display: block;
+    }
+
+    .search-label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+    }
+
+    .search input {
+      width: 100%;
+      border: 1px solid #c5cedb;
+      border-radius: 6px;
+      background: white;
+      color: var(--ink);
+      font: inherit;
+      font-size: 16px;
+      padding: 10px 12px;
+    }
+
+    .search input:focus {
+      outline: none;
+      border-color: var(--blue);
+    }
+
+    .suggest {
+      position: absolute;
+      z-index: 2;
+      left: 0;
+      right: 0;
+      top: calc(100% + 4px);
+      background: white;
+      border: 1px solid #c5cedb;
+      border-radius: 6px;
+      box-shadow: 0 8px 24px rgba(0, 32, 112, 0.12);
+    }
+
+    .suggest[hidden] { display: none; }
+
+    .suggest a,
+    .suggest p {
+      display: flex;
+      gap: 16px;
+      align-items: baseline;
+      margin: 0;
+      padding: 10px 14px;
+      text-decoration: none;
+      color: var(--ink);
+    }
+
+    .suggest a:hover,
+    .suggest a.active {
+      background: #f3f7fd;
+    }
+
+    .suggest .hit-no {
+      flex: 0 0 8em;
+      font-weight: 700;
+      color: var(--blue);
+      letter-spacing: 0.04em;
+    }
+
+    .suggest .none {
+      color: var(--muted);
+    }
+
+    .list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .columns,
+    .card {
+      display: grid;
+      grid-template-columns: 1.1fr 1.4fr 0.9fr 0.8fr 160px;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .columns {
+      padding: 8px 16px;
+      background: var(--blue);
+      border-bottom: 3px solid var(--red);
+      font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: white;
+    }
+
+    .card {
+      background: var(--paper);
+      border-top: 3px solid var(--blue);
+      box-shadow: 0 3px 0 var(--red);
+      padding: 14px 16px;
+    }
+
+    .num {
+      font-weight: 700;
+      color: var(--blue);
+      letter-spacing: 0.04em;
+    }
+
+    .who { font-weight: 700; }
+
+    .meta { color: var(--muted); font-size: 14px; }
+
+    .card a.open,
+    .card button.delete {
+      border: 0;
+      cursor: pointer;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 8px 12px;
+    }
+
+    .card a.open {
+      background: var(--blue);
+      color: white;
+    }
+
+    .card button.delete {
+      background: transparent;
+      color: var(--red);
+    }
+
+    .actions { display: flex; gap: 8px; justify-content: flex-end; }
+
+    .empty {
+      background: white;
+      padding: 28px 22px;
+      color: var(--muted);
+      border-top: 3px solid var(--blue);
+    }
+
+    .pager {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .pager[hidden] { display: none; }
+
+    .pager button {
+      border: 0;
+      background: transparent;
+      color: var(--blue);
+      box-shadow: inset 0 0 0 1px var(--blue);
+      padding: 8px 14px;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .pager button:disabled {
+      color: #8a96ab;
+      box-shadow: inset 0 0 0 1px #c5cedb;
+      cursor: default;
+    }
+
+    .page-status {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    @media (max-width: 720px) {
+      .columns { display: none; }
+      .card { grid-template-columns: 1fr; }
+      .actions { justify-content: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <p><strong>Saved invoices</strong></p>
+    <div class="toolbar-actions">
+      <a class="ghost" href="index.html?new=1">New invoice</a>
+    </div>
+  </div>
+  <main>
+    <div class="page-head">
+      <h1>Open an invoice</h1>
+      <a class="back" href="index.html">Back</a>
+    </div>
+    <p class="lede">Every invoice you save from the editor shows up here.</p>
+    <div class="search">
+      <label>
+        <span class="search-label">Search</span>
+        <input id="invoice-search" type="search" placeholder="Search client name or invoice number" autocomplete="off" aria-autocomplete="list" aria-controls="suggest">
+      </label>
+      <div class="suggest" id="suggest" hidden></div>
+    </div>
+    <div class="list" id="list"></div>
+    <nav class="pager" id="pager" hidden>
+      <button type="button" id="page-prev">Previous</button>
+      <span class="page-status" id="page-status"></span>
+      <button type="button" id="page-next">Next</button>
+    </nav>
+  </main>
+  <script src="invoice-store.js"></script>
+  <script>
+    const PAGE_SIZE = 25;
+    const list = document.getElementById("list");
+    const search = document.getElementById("invoice-search");
+    const suggest = document.getElementById("suggest");
+    const pager = document.getElementById("pager");
+    const pagePrev = document.getElementById("page-prev");
+    const pageNext = document.getElementById("page-next");
+    const pageStatus = document.getElementById("page-status");
+    let savedRows = [];
+    let page = 1;
+
+    function money(value) {
+      if (!value) return "—";
+      return "$" + value;
+    }
+
+    function when(record) {
+      if (record.date) {
+        const parsed = new Date(record.date + "T00:00:00");
+        if (!Number.isNaN(parsed.getTime())) {
+          return parsed.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+        }
+      }
+      if (!record.updatedAt) return "—";
+      return new Date(record.updatedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+    }
+
+    function matches(record, query) {
+      const needle = query.trim().toLowerCase();
+      if (!needle) return true;
+      const number = (record.invoiceNo || "").toLowerCase();
+      const customer = (record.customer || "").toLowerCase();
+      return number.includes(needle) || customer.includes(needle);
+    }
+
+    function showEmpty(message) {
+      list.replaceChildren();
+      pager.hidden = true;
+      const empty = document.createElement("div");
+      empty.className = "empty";
+      empty.textContent = message;
+      list.append(empty);
+    }
+
+    function renderPager(total, pages) {
+      if (pages <= 1) {
+        pager.hidden = true;
+        return;
+      }
+      pager.hidden = false;
+      const start = (page - 1) * PAGE_SIZE + 1;
+      const end = Math.min(page * PAGE_SIZE, total);
+      pageStatus.textContent = start + "–" + end + " of " + total;
+      pagePrev.disabled = page <= 1;
+      pageNext.disabled = page >= pages;
+    }
+
+    function renderSuggest(rows, query) {
+      suggest.replaceChildren();
+      if (!query.trim()) {
+        suggest.hidden = true;
+        return;
+      }
+      suggest.hidden = false;
+      const hits = rows.slice(0, 8);
+      if (!hits.length) {
+        const none = document.createElement("p");
+        none.className = "none";
+        none.textContent = "No matching invoices";
+        suggest.append(none);
+        return;
+      }
+      hits.forEach(function (record) {
+        const link = document.createElement("a");
+        link.href = "index.html?id=" + encodeURIComponent(record.id);
+        const num = document.createElement("span");
+        num.className = "hit-no";
+        num.textContent = record.invoiceNo || "Invoice";
+        const who = document.createElement("span");
+        who.textContent = record.customer || "No customer name";
+        link.append(num, who);
+        suggest.append(link);
+      });
+    }
+
+    function render(rows) {
+      const query = search.value;
+      const found = rows.filter(function (record) { return matches(record, query); });
+      renderSuggest(found, query);
+      if (!rows.length) {
+        showEmpty("No saved invoices yet. Fill one in and press Save.");
+        return;
+      }
+      if (!found.length) {
+        showEmpty("No invoices match that search.");
+        return;
+      }
+      const pages = Math.ceil(found.length / PAGE_SIZE);
+      if (page > pages) page = pages;
+      if (page < 1) page = 1;
+      const visible = found.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+      list.replaceChildren();
+      const head = document.createElement("div");
+      head.className = "columns";
+      ["Invoice", "Customer", "Date", "Amount", ""].forEach(function (label) {
+        const span = document.createElement("span");
+        span.textContent = label;
+        head.append(span);
+      });
+      list.append(head);
+      renderPager(found.length, pages);
+      visible.forEach(function (record) {
+        const card = document.createElement("article");
+        card.className = "card";
+
+        const num = document.createElement("div");
+        num.className = "num";
+        num.textContent = record.invoiceNo || "Invoice";
+
+        const who = document.createElement("div");
+        who.className = "who";
+        who.textContent = record.customer || "No customer name";
+
+        const date = document.createElement("div");
+        date.className = "meta";
+        date.textContent = when(record);
+
+        const price = document.createElement("div");
+        price.className = "meta";
+        price.textContent = money(record.price);
+
+        const actions = document.createElement("div");
+        actions.className = "actions";
+        const open = document.createElement("a");
+        open.className = "open";
+        open.href = "index.html?id=" + encodeURIComponent(record.id);
+        open.textContent = "Open";
+        const remove = document.createElement("button");
+        remove.type = "button";
+        remove.className = "delete";
+        remove.textContent = "Delete";
+        remove.addEventListener("click", function () {
+          InvoiceStore.remove(record.id).then(load);
+        });
+        actions.append(open, remove);
+        card.append(num, who, date, price, actions);
+        list.append(card);
+      });
+    }
+
+    function load() {
+      InvoiceStore.list().then(function (rows) {
+        savedRows = rows;
+        render(savedRows);
+      }).catch(function () {
+        savedRows = [];
+        suggest.hidden = true;
+        showEmpty("Saved invoices could not be loaded in this browser.");
+      });
+    }
+
+    search.addEventListener("input", function () {
+      page = 1;
+      render(savedRows);
+    });
+
+    pagePrev.addEventListener("click", function () {
+      if (page <= 1) return;
+      page -= 1;
+      render(savedRows);
+    });
+
+    pageNext.addEventListener("click", function () {
+      page += 1;
+      render(savedRows);
+    });
+
+    search.addEventListener("focus", function () {
+      if (search.value.trim()) render(savedRows);
+    });
+
+    search.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") {
+        suggest.hidden = true;
+      }
+    });
+
+    document.addEventListener("click", function (event) {
+      if (!event.target.closest(".search")) suggest.hidden = true;
+    });
+
+    load();
+  </script>
+</body>
+</html>

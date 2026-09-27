@@ -1,0 +1,3029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>All American Asphalt Invoice</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;1,700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue: #003090;
+      --blue-deep: #002070;
+      --blue-bright: #0040b0;
+      --red: #e00010;
+      --red-deep: #b0000c;
+      --black: #000000;
+      --ink: #111111;
+      --muted: #3d4a63;
+      --paper: #ffffff;
+      --desk: #e6edf6;
+      --hint: #8e9bb3;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--desk);
+      color: var(--ink);
+      font-family: "Source Sans 3", "Segoe UI", sans-serif;
+      font-size: 11.5px;
+      line-height: 1.35;
+    }
+
+    button, input { font: inherit; }
+
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 22px;
+      background: var(--black);
+      color: #ffffff;
+    }
+
+    .toolbar p {
+      margin: 0;
+      font-size: 13px;
+      letter-spacing: 0.01em;
+    }
+
+    .toolbar p strong { font-weight: 600; }
+
+    .toolbar-actions { display: flex; gap: 8px; }
+
+    .toolbar a,
+    .toolbar button {
+      border: 0;
+      background: var(--red);
+      color: white;
+      padding: 8px 14px;
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .toolbar a.ghost,
+    .toolbar button.ghost {
+      background: transparent;
+      color: #ffffff;
+      box-shadow: inset 0 0 0 1px var(--blue-bright);
+    }
+
+    .toolbar button.save { background: var(--blue); }
+
+    .menu { position: relative; }
+
+    .menu-panel {
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 0;
+      min-width: 190px;
+      background: white;
+      box-shadow: 0 10px 28px rgba(0, 32, 112, 0.2);
+      z-index: 6;
+      display: grid;
+    }
+
+    .menu-panel[hidden] { display: none !important; }
+
+    .toolbar .menu-panel button {
+      background: white;
+      color: var(--blue-deep);
+      width: 100%;
+      justify-content: flex-start;
+      box-shadow: none;
+      padding: 10px 12px;
+    }
+
+    .toolbar .menu-panel button:hover { background: #f3f7fd; }
+
+    .sheet {
+      width: 8.5in;
+      height: 11in;
+      margin: 28px auto;
+      background: var(--paper);
+      box-shadow: 0 12px 40px rgba(0, 32, 112, 0.16);
+      overflow: hidden;
+    }
+
+    .cover {
+      padding: 0.42in 0.48in 0.12in;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .continuation,
+    .notes-page,
+    .terms-page,
+    .terms-more,
+    .accept-page {
+      display: none;
+      padding: 0.34in 0.48in 0.28in;
+    }
+
+    body.page-2 .cover,
+    body.page-3 .cover,
+    body.page-4 .cover,
+    body.page-5 .cover,
+    body.page-6 .cover { display: none; }
+    body.page-2 .continuation,
+    body.page-3 .notes-page,
+    body.page-4 .terms-page,
+    body.page-5 .terms-more,
+    body.page-6 .accept-page {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .page-number {
+      margin: 14px 0 0;
+      text-align: center;
+      font-size: 9px;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+
+    .cover > header,
+    .cover > .fixed,
+    .cover > .band,
+    .cover > .page-number {
+      flex-shrink: 0;
+    }
+
+    .cover > .grow {
+      flex: 1 1 0;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cover > .grow:has(#scope-text) {
+      flex: 0 0 auto;
+      min-height: auto;
+    }
+
+    .cover .scope-wrap {
+      flex: 0 0 auto;
+      min-height: auto;
+      margin-top: 6px;
+      grid-template-rows: auto auto;
+    }
+
+    .cover .writing {
+      min-height: 0;
+      overflow: auto;
+    }
+
+    .cover #scope-text {
+      min-height: 0.7in;
+      overflow: visible;
+    }
+
+    .cover #options-text {
+      flex: 1 1 auto;
+      min-height: 0;
+    }
+
+    .cover .band { margin-top: 10px; }
+    .cover .page-number { margin-top: 18px; }
+
+    .continuation .sheet-body {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow: auto;
+    }
+
+    .continuation > header,
+    .continuation > .scope-title-row,
+    .continuation > .page-number {
+      flex-shrink: 0;
+    }
+
+    .continuation > header { margin-bottom: 10px; }
+
+    .notes-page > header,
+    .notes-page > .page-number {
+      flex-shrink: 0;
+    }
+
+    .notes-page > .page-number { margin-top: auto; }
+
+    .notes-page > header { margin-bottom: 10px; }
+
+    .disclaimer {
+      margin-top: 96px;
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--ink);
+    }
+
+    .disclaimer p { margin: 0 0 14px; }
+
+    .sign-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 36px;
+      margin-top: 22px;
+    }
+
+    .disclaimer .sign-row { margin-top: 240px; }
+
+    .warranty-extra .sign-row { margin-top: 100px; }
+
+    .sign-line {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .sign-line.date { flex: 0 1 2.35in; }
+
+    .sign-line .rule {
+      flex: 1;
+      border-bottom: 1px solid var(--ink);
+      min-height: 1.15em;
+    }
+
+    .terms-page > header,
+    .terms-page > .page-number,
+    .terms-more > header,
+    .terms-more > .page-number,
+    .accept-page > header,
+    .accept-page > .page-number { flex-shrink: 0; }
+    .terms-page > header,
+    .terms-more > header,
+    .accept-page > header { margin-bottom: 8px; }
+    .terms-page > .page-number,
+    .terms-more > .page-number,
+    .accept-page > .page-number { margin-top: auto; }
+
+    .terms-title {
+      margin: 8px 0 10px;
+      text-align: center;
+      font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--blue-deep);
+    }
+
+    .terms {
+      margin: 0;
+      padding: 0 0 0 1.15em;
+      font-size: 11.5px;
+      line-height: 1.35;
+      color: var(--ink);
+    }
+
+    .terms li { margin: 0 0 7px; padding-left: 4px; }
+    .terms li:last-child { margin-bottom: 0; }
+
+    .terms-more > .terms:first-of-type { margin-top: 100px; }
+
+    .warranty-title { margin-top: 48px; }
+
+    .warranty-extra {
+      margin-top: 14px;
+      font-size: 11.5px;
+      line-height: 1.35;
+      color: var(--ink);
+    }
+
+    .warranty-extra p { margin: 0 0 8px; }
+    .warranty-extra p:last-child { margin-bottom: 0; }
+
+    .accept-block {
+      display: grid;
+      grid-template-columns: 1.55in 1fr;
+      gap: 12px 16px;
+      align-items: start;
+      margin-top: 16px;
+    }
+
+    .accept-page > .accept-block:first-of-type { margin-top: 36px; }
+
+    .accept-page > .band {
+      margin-top: auto;
+      flex-shrink: 0;
+    }
+
+    .accept-page > .page-number { margin-top: 12px; }
+
+    .footer-mirror {
+      display: block;
+      min-height: 1.25em;
+      border-bottom: 1px solid #d5deee;
+      padding: 0 0 1px;
+      color: var(--blue-deep);
+    }
+
+    .footer-mirror[data-empty="true"]:before {
+      content: attr(data-placeholder);
+      color: var(--hint);
+      font-style: italic;
+      font-weight: 400;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    .accept-label {
+      background: var(--blue);
+      color: white;
+      border-bottom: 3px solid var(--red);
+      font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      font-size: 12px;
+      line-height: 1.2;
+      text-align: center;
+      text-transform: uppercase;
+      padding: 8px 8px;
+    }
+
+    .accept-copy {
+      margin: 0;
+      font-size: 12px;
+      line-height: 1.4;
+      color: var(--ink);
+    }
+
+    .accept-copy p { margin: 0 0 8px; }
+    .accept-copy p:last-child { margin-bottom: 0; }
+
+    .accept-sum {
+      margin: 8px 0 2px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .accept-note,
+    .accept-payee {
+      text-align: center;
+      font-size: 11px;
+    }
+
+    .accept-payee {
+      margin-top: 8px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .accept-terms { font-weight: 700; padding-top: 6px; }
+
+    .accept-signs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px 36px;
+      margin-top: 22px;
+    }
+
+    .accept-party {
+      min-height: 1.2em;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .accept-field { margin-top: 16px; }
+
+    .accept-field .rule {
+      border-bottom: 1px solid var(--ink);
+      min-height: 22px;
+    }
+
+    .accept-field .cap {
+      margin-top: 3px;
+      font-size: 11px;
+    }
+
+    .billing-diff {
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-start;
+      gap: 8px;
+      margin-top: 18px;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .billing-diff input { margin-top: 2px; }
+
+    .page-nav {
+      width: 8.5in;
+      margin: 12px auto 28px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    body.page-2 .page-nav,
+    body.page-3 .page-nav,
+    body.page-4 .page-nav,
+    body.page-5 .page-nav,
+    body.page-6 .page-nav { justify-content: space-between; }
+    body:not(.page-2):not(.page-3):not(.page-4):not(.page-5):not(.page-6) #prev-page { display: none; }
+
+    .page-turn {
+      border: 0;
+      background: var(--blue);
+      color: white;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-size: 12px;
+      padding: 8px 14px;
+      cursor: pointer;
+    }
+
+    .page-turn.back {
+      background: transparent;
+      color: var(--blue);
+      box-shadow: inset 0 0 0 1px var(--blue);
+    }
+
+    .page-turn:disabled {
+      opacity: 0.35;
+      cursor: default;
+    }
+
+    .confirm {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      display: grid;
+      place-items: center;
+      background: rgba(0, 16, 48, 0.45);
+    }
+
+    .confirm[hidden] { display: none !important; }
+
+    .confirm-card {
+      width: min(440px, calc(100% - 32px));
+      background: white;
+      padding: 22px 22px 16px;
+      border-top: 3px solid var(--blue);
+      box-shadow: 0 3px 0 var(--red);
+    }
+
+    .confirm-card p {
+      margin: 0 0 16px;
+      font-size: 15px;
+      color: var(--blue-deep);
+    }
+
+    .confirm-actions { display: flex; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
+
+    .confirm-actions button {
+      border: 0;
+      background: var(--blue);
+      color: white;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 8px 14px;
+      cursor: pointer;
+    }
+
+    .confirm-actions button.no {
+      background: transparent;
+      color: var(--blue-deep);
+      box-shadow: inset 0 0 0 1px var(--blue);
+    }
+
+    .confirm-name {
+      display: grid;
+      gap: 4px;
+      margin-bottom: 8px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--blue);
+    }
+
+    .confirm-name input {
+      border: 0;
+      border-bottom: 1px solid #d5deee;
+      border-radius: 0;
+      padding: 4px 0;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0;
+      text-transform: none;
+      color: var(--ink);
+    }
+
+    .confirm-name input:focus {
+      outline: none;
+      border-bottom-color: var(--blue);
+    }
+
+    .confirm-error {
+      margin: 0 0 12px;
+      font-size: 12px;
+      color: var(--red);
+    }
+
+    header.top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 24px;
+    }
+
+    .brand-lockup {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      min-width: 0;
+    }
+
+    .logo {
+      display: block;
+      height: 112px;
+      width: auto;
+      max-width: 3.4in;
+      flex: 0 0 auto;
+    }
+
+    .hq {
+      margin: 0;
+      font-style: normal;
+      color: var(--blue-deep);
+      font-size: 11px;
+      line-height: 1.45;
+      font-weight: 600;
+    }
+
+    .logo-sm {
+      display: block;
+      height: 56px;
+      width: auto;
+      max-width: none;
+      align-self: flex-start;
+      flex: 0 0 auto;
+      object-fit: contain;
+      margin-bottom: 8px;
+    }
+
+    .cover-meta {
+      text-align: right;
+      min-width: 2.7in;
+      padding-top: 22px;
+    }
+
+    .meta-line {
+      display: flex;
+      justify-content: flex-end;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .meta-line .k {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--blue);
+    }
+
+    .meta-line .v {
+      min-width: 1.55in;
+      border-bottom: 1px solid #c5d0e4;
+      text-align: left;
+      padding: 2px 4px 3px;
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--blue-deep);
+    }
+
+    .meta-line input[type="date"].v {
+      border: 0;
+      border-bottom: 1px solid #c5d0e4;
+      border-radius: 0;
+      background: transparent;
+      font: inherit;
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--blue-deep);
+      width: 1.85in;
+      line-height: 1.2;
+      cursor: pointer;
+    }
+
+    .meta-line input[type="date"].v:focus {
+      outline: none;
+      background: #f3f7fd;
+    }
+
+    .meta-line input[type="date"]::-webkit-calendar-picker-indicator {
+      cursor: pointer;
+      opacity: 0.75;
+    }
+
+    .cover-price {
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+      margin-top: 12px;
+      margin-bottom: 0;
+    }
+
+    .cover-price .k {
+      background: transparent;
+      color: var(--blue);
+      border: 0;
+      font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      line-height: 1;
+      padding: 0 2px;
+    }
+
+    .cover-price .v {
+      display: inline-flex;
+      align-items: baseline;
+      justify-content: flex-end;
+      gap: 5px;
+      min-width: 1.55in;
+      background: var(--blue);
+      color: white;
+      border: 0;
+      border-bottom: 3px solid var(--red);
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1;
+      text-align: right;
+      padding: 8px 12px 7px;
+      white-space: nowrap;
+    }
+
+    .cover-price .mark {
+      font-size: 13px;
+      font-weight: 600;
+      opacity: 0.8;
+    }
+
+    .block { margin-top: 12px; }
+
+    .bar {
+      display: inline-block;
+      background: var(--blue);
+      color: white;
+      border-bottom: 3px solid var(--red);
+      font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.11em;
+      font-size: 13px;
+      line-height: 1;
+      padding: 5px 14px 4px 10px;
+      text-transform: uppercase;
+    }
+
+    .info-row {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 8px;
+    }
+
+    .info-fields {
+      display: grid;
+      gap: 4px;
+      padding-top: 0;
+    }
+
+    .field {
+      display: grid;
+      grid-template-columns: 62px 1fr;
+      gap: 8px;
+      align-items: baseline;
+    }
+
+    .field-label {
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--blue);
+    }
+
+    .field input,
+    .field select,
+    .proposal-no span[contenteditable] {
+      width: 100%;
+      border: 0;
+      border-bottom: 1px solid #d5deee;
+      border-radius: 0;
+      background: transparent;
+      padding: 1px 0 2px;
+      color: var(--ink);
+      font: inherit;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .field input::placeholder {
+      color: var(--hint);
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .field input:focus,
+    .field select:focus {
+      outline: none;
+      border-bottom-color: var(--blue);
+      background-color: #f3f7fd;
+    }
+
+    .field select {
+      appearance: none;
+      padding-right: 14px;
+      background-image:
+        linear-gradient(45deg, transparent 50%, var(--blue) 50%),
+        linear-gradient(135deg, var(--blue) 50%, transparent 50%);
+      background-position: calc(100% - 8px) 8px, calc(100% - 4px) 8px;
+      background-size: 4px 4px, 4px 4px;
+      background-repeat: no-repeat;
+      cursor: pointer;
+    }
+
+    .field select:has(option[value=""]:checked) {
+      color: var(--hint);
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1.15fr 1.15fr 0.7fr;
+      gap: 10px;
+    }
+
+    .split .field,
+    .address-line .field {
+      grid-template-columns: auto 1fr;
+    }
+
+    .address-line {
+      display: grid;
+      grid-template-columns: 1fr 0.38fr;
+      gap: 10px;
+    }
+
+    .proposal-no {
+      margin-top: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--blue-deep);
+    }
+
+    .proposal-no span[contenteditable] {
+      display: inline-block;
+      min-width: 1.4in;
+      width: auto;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    .scope-wrap {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .writing {
+      min-height: 2.15in;
+      white-space: pre-wrap;
+      font-size: 16px;
+      line-height: 1.45;
+    }
+
+    #options-text { margin-top: 10px; }
+
+    .price {
+      display: flex;
+      justify-content: flex-end;
+      align-items: baseline;
+      gap: 2px;
+      font-weight: 700;
+      font-size: 18px;
+      padding-top: 1px;
+      white-space: nowrap;
+      color: var(--blue);
+    }
+
+    .price input {
+      width: auto;
+      min-width: 3.5ch;
+      max-width: 2.2in;
+      field-sizing: content;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      text-align: left;
+      font: inherit;
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--blue);
+      padding: 2px 0 3px;
+    }
+
+    .price input::placeholder {
+      color: var(--hint);
+      font-weight: 400;
+    }
+
+    .price input:focus {
+      outline: none;
+      background: #f3f7fd;
+    }
+
+    .gallery { margin-top: 10px; }
+
+    .upload {
+      display: inline-flex;
+      align-items: center;
+      border: 1px dashed var(--blue);
+      color: var(--blue);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 11px;
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+
+    .upload input { display: none; }
+
+    .carousel[hidden] { display: none !important; }
+
+    .carousel {
+      margin-top: 10px;
+    }
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: grid;
+      place-items: center;
+      padding: 48px 72px;
+      background: rgba(0, 16, 48, 0.82);
+    }
+
+    .lightbox[hidden] { display: none !important; }
+
+    .lightbox img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      box-shadow: 0 16px 50px rgba(0, 0, 0, 0.35);
+    }
+
+    .lightbox-actions {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .lightbox-actions button,
+    .lightbox-nav {
+      border: 0;
+      background: white;
+      color: var(--blue-deep);
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .lightbox-actions button {
+      padding: 8px 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-size: 12px;
+    }
+
+    .lightbox-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 42px;
+      height: 42px;
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .lightbox-prev { left: 16px; }
+    .lightbox-next { right: 16px; }
+
+    .thumbs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+
+    .thumbs button {
+      flex: 0 0 auto;
+      width: 72px;
+      height: 54px;
+      padding: 0;
+      border: 2px solid transparent;
+      background: #eef3fa;
+      cursor: zoom-in;
+    }
+
+    .thumbs button[aria-current="true"] { border-color: var(--red); }
+
+    .thumbs img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .photo-count {
+      margin-top: 6px;
+      text-align: left;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--blue);
+    }
+
+    .print-photos { display: none; }
+
+    .band {
+      margin-top: 8px;
+      padding-top: 0;
+      color: var(--blue-deep);
+      background: transparent;
+    }
+
+    .band-rule {
+      height: 7px;
+      margin-bottom: 12px;
+      background:
+        linear-gradient(var(--blue), var(--blue)) top / 100% 3px no-repeat,
+        linear-gradient(var(--red), var(--red)) bottom / 100% 3px no-repeat;
+    }
+
+    .band-main {
+      display: grid;
+      grid-template-columns: 1.15fr 0.9fr 1.15fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .band-kicker {
+      margin-bottom: 4px;
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--red);
+    }
+
+    .office {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    .office strong {
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--blue);
+    }
+
+    .slogan {
+      text-align: center;
+      padding-top: 18px;
+    }
+
+    .giving {
+      font-family: "Barlow Condensed", sans-serif;
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: 0.02em;
+      line-height: 1;
+      color: var(--blue);
+    }
+
+    .site {
+      margin: 8px auto 0;
+      font-size: 11px;
+      letter-spacing: 0.02em;
+      font-weight: 700;
+      color: var(--blue);
+    }
+
+    .advisor {
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    .contact-line {
+      display: grid;
+      grid-template-columns: 46px 1fr;
+      gap: 8px;
+      align-items: baseline;
+      margin-top: 3px;
+    }
+
+    .contact-line .tag {
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .office [contenteditable="true"],
+    .contact-line [contenteditable="true"] {
+      display: block;
+      min-height: 1.25em;
+      border-bottom: 1px solid #d5deee;
+      padding: 0 0 1px;
+    }
+
+    .scope-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-bottom: 3px solid var(--blue);
+      box-shadow: 0 3px 0 var(--red);
+      padding-bottom: 3px;
+    }
+
+    .scope-title-row h2 {
+      margin: 0;
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 20px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--blue-deep);
+    }
+
+    .included-col {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--red);
+    }
+
+    .coord {
+      margin: 6px 0 4px 22px;
+      font-weight: 700;
+      min-height: 1.2em;
+    }
+
+    .checks {
+      list-style: none;
+      margin: 0 0 8px;
+      padding: 2px 0 2px 10px;
+      border-left: 2px dotted var(--blue);
+    }
+
+    .checks li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin: 1px 0;
+      min-height: 16px;
+    }
+
+    .checks input {
+      appearance: none;
+      width: 11px;
+      height: 11px;
+      border: 1.5px solid var(--blue);
+      margin-top: 2px;
+      flex: 0 0 auto;
+      background: white;
+      display: grid;
+      place-items: center;
+    }
+
+    .checks input:checked::after {
+      content: "";
+      width: 6px;
+      height: 6px;
+      background: var(--red);
+    }
+
+    .checks li span[contenteditable] {
+      flex: 1;
+      min-height: 1.15em;
+    }
+
+    .row-x, .bullet-x {
+      border: 0;
+      background: transparent;
+      color: #b9b9b9;
+      cursor: pointer;
+      padding: 0 2px;
+      line-height: 1;
+      font-size: 14px;
+      opacity: 0;
+    }
+
+    .bullet-x {
+      opacity: 1;
+      color: var(--red);
+    }
+
+    .detail {
+      margin-top: 6px;
+      page-break-inside: avoid;
+    }
+
+    .detail[hidden] { display: none !important; }
+
+    .detail header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      border-bottom: 1px solid #ececec;
+      padding-bottom: 2px;
+    }
+
+    .detail header .text-btn {
+      margin-top: 0;
+      flex: 0 0 auto;
+    }
+
+    .detail h3 {
+      margin: 0;
+      font-size: 12.5px;
+      font-weight: 700;
+      min-height: 1.2em;
+      flex: 1;
+    }
+
+    .pill {
+      flex: 0 0 auto;
+      border: 1.5px solid var(--blue);
+      color: var(--blue);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 1px 6px 0;
+    }
+
+    .detail ul {
+      margin: 4px 0 0;
+      padding-left: 18px;
+    }
+
+    .detail li {
+      margin: 2px 0;
+      padding-left: 2px;
+    }
+
+    .detail li span[contenteditable] {
+      display: inline;
+    }
+
+    .text-btn {
+      margin-top: 8px;
+      border: 0;
+      background: transparent;
+      color: var(--blue);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-size: 10px;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    [contenteditable="true"] {
+      outline: none;
+    }
+
+    [contenteditable="true"]:focus {
+      background: #f3f7fd;
+      box-shadow: inset 0 -1px 0 rgba(0, 48, 144, 0.45);
+    }
+
+    [contenteditable="true"][data-empty="true"]:before {
+      content: attr(data-placeholder);
+      color: var(--hint);
+      font-style: italic;
+      font-weight: 400;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    .band [contenteditable="true"] {
+      color: var(--blue-deep);
+    }
+
+    .band [contenteditable="true"][data-empty="true"]:before {
+      color: var(--hint);
+      font-style: italic;
+    }
+
+    .band [contenteditable="true"]:focus {
+      background: transparent;
+      box-shadow: inset 0 -1px 0 rgba(0, 48, 144, 0.45);
+    }
+
+    .blank-print {
+      position: fixed;
+      left: -10000px;
+      top: 0;
+      width: 8.5in;
+      background: white;
+    }
+
+    .pdf-export {
+      width: 8.5in;
+      background: white;
+    }
+
+    .pdf-export [contenteditable="true"][data-empty="true"]:before,
+    .pdf-export .footer-mirror[data-empty="true"]:before {
+      content: none !important;
+    }
+
+    .pdf-export input::placeholder { color: transparent; }
+    .pdf-export select:has(option[value=""]:checked) { color: transparent; }
+
+    @media print {
+      body.printing-blank > .sheet { display: none !important; }
+      body.printing-blank .blank-print {
+        position: static;
+        left: auto;
+      }
+      body.printing-blank .blank-print .sheet {
+        display: flex !important;
+        flex-direction: column;
+      }
+      body { background: white; margin: 0; }
+      .noprint { display: none !important; }
+      .thumbs.noprint { display: flex !important; }
+      .photo-count.noprint { display: block !important; }
+      .sheet {
+        width: 8.5in;
+        height: 11in;
+        margin: 0;
+        box-shadow: none;
+        overflow: hidden;
+      }
+      .cover { display: flex !important; page-break-after: always; }
+      .continuation,
+      .notes-page,
+      .terms-page,
+      .terms-more,
+      .accept-page {
+        display: flex !important;
+        flex-direction: column;
+      }
+      .continuation,
+      .notes-page,
+      .terms-page,
+      .terms-more { page-break-after: always; }
+      [contenteditable="true"][data-empty="true"]:before { content: none !important; }
+      .field input::placeholder { color: transparent; }
+      .field select:has(option[value=""]:checked) { color: transparent; }
+      .price input::placeholder { color: transparent; }
+      .meta-line input[type="date"]::-webkit-calendar-picker-indicator { display: none; }
+      [contenteditable="true"]:focus {
+        background: transparent;
+        box-shadow: none;
+      }
+      .detail { page-break-inside: avoid; }
+      .print-photos { display: none !important; }
+      .logo { height: 112px; width: auto; max-width: 3.4in; }
+      .logo-sm { height: 56px; width: auto; max-width: none; align-self: flex-start; object-fit: contain; }
+      .thumbs button { width: 72px; height: 54px; }
+      .thumbs img {
+        width: 72px;
+        height: 54px;
+        max-width: 72px;
+        max-height: 54px;
+        object-fit: cover;
+      }
+      * {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+    }
+
+    @page {
+      size: letter;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="confirm noprint" id="finish-confirm" hidden>
+    <div class="confirm-card" role="dialog" aria-labelledby="finish-title">
+      <p id="finish-title">Save this invoice</p>
+      <label class="confirm-name">File name
+        <input id="finish-name" type="text" autocomplete="off">
+      </label>
+      <p class="confirm-error" id="finish-error" hidden></p>
+      <div class="confirm-actions">
+        <button type="button" id="finish-cancel" class="no">Cancel</button>
+        <button type="button" id="finish-save">Save</button>
+      </div>
+    </div>
+  </div>
+  <div class="confirm noprint" id="new-confirm" hidden>
+    <div class="confirm-card" role="dialog" aria-labelledby="new-title">
+      <p id="new-title">Save this invoice before starting a new one?</p>
+      <label class="confirm-name">Name
+        <input id="new-name" type="text" autocomplete="off">
+      </label>
+      <p class="confirm-error" id="new-error" hidden></p>
+      <div class="confirm-actions">
+        <button type="button" id="new-cancel" class="no">Cancel</button>
+        <button type="button" id="new-start" class="no">Start new invoice</button>
+        <button type="button" id="new-save">Save</button>
+      </div>
+    </div>
+  </div>
+  <div class="confirm noprint" id="overwrite-confirm" hidden>
+    <div class="confirm-card" role="dialog" aria-labelledby="overwrite-title">
+      <p id="overwrite-title">This invoice is already saved. Overwrite it, or save a copy under a new name.</p>
+      <label class="confirm-name">Copy name
+        <input id="overwrite-name" type="text" autocomplete="off">
+      </label>
+      <p class="confirm-error" id="overwrite-error" hidden></p>
+      <div class="confirm-actions">
+        <button type="button" id="overwrite-no" class="no">Cancel</button>
+        <button type="button" id="overwrite-yes" class="no">Overwrite</button>
+        <button type="button" id="overwrite-rename">Save copy</button>
+      </div>
+    </div>
+  </div>
+  <div class="toolbar noprint">
+    <div class="toolbar-actions">
+      <button type="button" class="ghost" id="new-invoice">New invoice</button>
+      <a class="ghost" href="invoices.html">Open</a>
+      <button type="button" class="save" id="save-invoice">Save</button>
+      <button type="button" class="ghost" id="email-invoice">Email</button>
+      <div class="menu">
+        <button type="button" id="output-toggle" aria-expanded="false" aria-haspopup="true">Print / PDF</button>
+        <div class="menu-panel" id="output-panel" hidden>
+          <button type="button" id="download-invoice">Download invoice</button>
+          <button type="button" id="print-invoice">Print invoice</button>
+          <button type="button" id="print-blank">Print blank invoice</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <article class="sheet cover">
+    <header class="top">
+      <div class="brand-lockup">
+        <img class="logo" src="logo.webp" alt="All American Asphalt, LLC. From Start to Finish.">
+        <address class="hq">
+          <div>1645 Palm Beach Lakes Blvd</div>
+          <div>Suite 1200</div>
+          <div>West Palm Beach FL 33401</div>
+          <div>(561) 684-9183</div>
+          <div>Fax: (561) 684-9536</div>
+          <div>allamericanasphaltpaving.com</div>
+        </address>
+      </div>
+      <div class="cover-meta">
+        <div class="meta-line">
+          <span class="k">Date</span>
+          <input class="v" id="cover-date" type="date" name="cover-date" aria-label="Cover date">
+        </div>
+        <div class="meta-line">
+          <span class="k">Invoice</span>
+          <span class="v" id="invoice-no"></span>
+        </div>
+        <div class="meta-line cover-price">
+          <span class="k">Balance</span>
+          <span class="v"><span class="mark">$</span><span class="price-mirror"></span></span>
+        </div>
+      </div>
+    </header>
+
+    <section class="block fixed">
+      <div class="info-row">
+        <div class="bar">Project Information</div>
+        <div class="info-fields">
+          <label class="field">
+            <span class="field-label">Customer</span>
+            <input type="text" name="customer" autocomplete="name" placeholder="Customer or property name">
+          </label>
+          <div class="address-line">
+            <label class="field">
+              <span class="field-label">Address</span>
+              <input type="text" name="street" autocomplete="street-address" placeholder="Street address">
+            </label>
+            <label class="field">
+              <span class="field-label">Suite</span>
+              <input type="text" name="suite" autocomplete="address-line2" placeholder="Suite">
+            </label>
+          </div>
+          <div class="split">
+            <label class="field">
+              <span class="field-label">City</span>
+              <input type="text" name="city" autocomplete="address-level2" placeholder="City">
+            </label>
+            <label class="field">
+              <span class="field-label">State</span>
+              <select name="state" autocomplete="address-level1">
+                <option value="" selected>State</option>
+                <option value="AL">Alabama</option>
+                <option value="AK">Alaska</option>
+                <option value="AZ">Arizona</option>
+                <option value="AR">Arkansas</option>
+                <option value="CA">California</option>
+                <option value="CO">Colorado</option>
+                <option value="CT">Connecticut</option>
+                <option value="DE">Delaware</option>
+                <option value="DC">District of Columbia</option>
+                <option value="FL">Florida</option>
+                <option value="GA">Georgia</option>
+                <option value="HI">Hawaii</option>
+                <option value="ID">Idaho</option>
+                <option value="IL">Illinois</option>
+                <option value="IN">Indiana</option>
+                <option value="IA">Iowa</option>
+                <option value="KS">Kansas</option>
+                <option value="KY">Kentucky</option>
+                <option value="LA">Louisiana</option>
+                <option value="ME">Maine</option>
+                <option value="MD">Maryland</option>
+                <option value="MA">Massachusetts</option>
+                <option value="MI">Michigan</option>
+                <option value="MN">Minnesota</option>
+                <option value="MS">Mississippi</option>
+                <option value="MO">Missouri</option>
+                <option value="MT">Montana</option>
+                <option value="NE">Nebraska</option>
+                <option value="NV">Nevada</option>
+                <option value="NH">New Hampshire</option>
+                <option value="NJ">New Jersey</option>
+                <option value="NM">New Mexico</option>
+                <option value="NY">New York</option>
+                <option value="NC">North Carolina</option>
+                <option value="ND">North Dakota</option>
+                <option value="OH">Ohio</option>
+                <option value="OK">Oklahoma</option>
+                <option value="OR">Oregon</option>
+                <option value="PA">Pennsylvania</option>
+                <option value="RI">Rhode Island</option>
+                <option value="SC">South Carolina</option>
+                <option value="SD">South Dakota</option>
+                <option value="TN">Tennessee</option>
+                <option value="TX">Texas</option>
+                <option value="UT">Utah</option>
+                <option value="VT">Vermont</option>
+                <option value="VA">Virginia</option>
+                <option value="WA">Washington</option>
+                <option value="WV">West Virginia</option>
+                <option value="WI">Wisconsin</option>
+                <option value="WY">Wyoming</option>
+              </select>
+            </label>
+            <label class="field">
+              <span class="field-label">ZIP</span>
+              <input type="text" name="zip" autocomplete="postal-code" placeholder="00000" inputmode="numeric" maxlength="10">
+            </label>
+          </div>
+          <label class="field">
+            <span class="field-label">Phone</span>
+            <input id="project-phone" type="tel" name="phone" autocomplete="tel" inputmode="tel" placeholder="(000) 000-0000" maxlength="14">
+          </label>
+          <label class="field">
+            <span class="field-label">Email</span>
+            <input id="client-email" type="email" name="client-email" autocomplete="email" placeholder="client@email.com">
+          </label>
+          <div class="proposal-no">Proposal Number <span id="proposal-no" contenteditable="true" data-placeholder="0000-00000" data-empty="true"></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block grow">
+      <div class="bar">Scope of Work</div>
+      <div class="scope-wrap">
+        <div id="scope-text" class="writing" contenteditable="true" data-placeholder="Type the scope of work" data-empty="true"></div>
+        <div class="price">$<input id="price-scope" type="text" inputmode="decimal" placeholder="0.00" aria-label="Price" autocomplete="off"></div>
+      </div>
+    </section>
+
+    <section class="block grow">
+      <div class="bar">Options:</div>
+      <div id="options-text" class="writing" contenteditable="true" data-placeholder="Type options here" data-empty="true"></div>
+    </section>
+
+    <section class="block fixed">
+      <div class="bar">Photos</div>
+      <div class="gallery">
+        <label class="upload noprint">
+          Upload photos
+          <input id="photo-input" type="file" accept="image/*" multiple>
+        </label>
+        <div class="carousel" id="carousel" hidden>
+          <div class="thumbs noprint" id="photo-thumbs"></div>
+          <div class="photo-count noprint" id="photo-count"></div>
+        </div>
+        <div class="print-photos" id="print-photos"></div>
+      </div>
+    </section>
+    <div class="lightbox noprint" id="lightbox" hidden>
+      <div class="lightbox-actions">
+        <button type="button" id="lightbox-download">Download</button>
+        <button type="button" id="lightbox-close">Close</button>
+      </div>
+      <button type="button" class="lightbox-nav lightbox-prev" id="lightbox-prev" aria-label="Previous photo">‹</button>
+      <img id="lightbox-view" alt="">
+      <button type="button" class="lightbox-nav lightbox-next" id="lightbox-next" aria-label="Next photo">›</button>
+    </div>
+
+    <footer class="band">
+      <div class="band-rule" aria-hidden="true"></div>
+      <div class="band-main">
+        <div class="office">
+          <div class="band-kicker">Office</div>
+          <strong>All American Asphalt, LLC</strong>
+          <span id="office-street" contenteditable="true" data-placeholder="Street address" data-empty="true"></span>
+          <span id="office-city" contenteditable="true" data-placeholder="City, State ZIP" data-empty="true"></span>
+        </div>
+        <div class="slogan">
+          <div class="giving">“From Start to Finish”</div>
+          <div class="site">allamericanasphaltpaving.com</div>
+        </div>
+        <div class="advisor">
+          <div class="band-kicker">Estimator</div>
+          <div class="contact-line">
+            <span class="tag">Name</span>
+            <span id="estimator-name" contenteditable="true" data-placeholder="Full name" data-empty="true"></span>
+          </div>
+          <div class="contact-line">
+            <span class="tag">Phone</span>
+            <span id="estimator-phone" contenteditable="true" data-placeholder="(000) 000-0000" data-empty="true"></span>
+          </div>
+          <div class="contact-line">
+            <span class="tag">Email</span>
+            <span id="estimator-email" contenteditable="true" data-placeholder="name@email.com" data-empty="true"></span>
+          </div>
+        </div>
+      </div>
+      </footer>
+    <p class="page-number">Page 1</p>
+  </article>
+
+  <article class="sheet continuation">
+    <header class="top">
+      <div class="brand-lockup">
+        <img class="logo" src="logo.webp" alt="All American Asphalt, LLC. From Start to Finish.">
+        <address class="hq">
+          <div>1645 Palm Beach Lakes Blvd</div>
+          <div>Suite 1200</div>
+          <div>West Palm Beach FL 33401</div>
+          <div>(561) 684-9183</div>
+          <div>Fax: (561) 684-9536</div>
+          <div>allamericanasphaltpaving.com</div>
+        </address>
+      </div>
+      <div class="cover-meta">
+        <div class="meta-line">
+          <span class="k">Date</span>
+          <input class="v page-date" id="page-date" type="date" aria-label="Invoice date">
+        </div>
+        <div class="meta-line">
+          <span class="k">Invoice</span>
+          <span class="v invoice-mirror" id="invoice-no-page"></span>
+        </div>
+      </div>
+    </header>
+    <div class="scope-title-row">
+      <h2>Scope of Work:</h2>
+      <span class="included-col">Included</span>
+    </div>
+    <div id="coordination" class="coord" contenteditable="true">Project Coordination</div>
+    <div class="sheet-body">
+    <ul class="checks" id="checks"></ul>
+    <button type="button" class="text-btn noprint" id="add-line">Add line</button>
+
+    <div id="details"></div>
+    <button type="button" class="text-btn noprint" id="add-detail">Add detail section</button>
+    </div>
+    <p class="page-number">Page 2</p>
+  </article>
+
+  <article class="sheet notes-page">
+    <header class="top">
+      <div class="brand-lockup">
+        <img class="logo" src="logo.webp" alt="All American Asphalt, LLC. From Start to Finish.">
+        <address class="hq">
+          <div>1645 Palm Beach Lakes Blvd</div>
+          <div>Suite 1200</div>
+          <div>West Palm Beach FL 33401</div>
+          <div>(561) 684-9183</div>
+          <div>Fax: (561) 684-9536</div>
+          <div>allamericanasphaltpaving.com</div>
+        </address>
+      </div>
+      <div class="cover-meta">
+        <div class="meta-line">
+          <span class="k">Date</span>
+          <input class="v page-date" id="page-date-3" type="date" aria-label="Invoice date">
+        </div>
+        <div class="meta-line">
+          <span class="k">Invoice</span>
+          <span class="v invoice-mirror" id="invoice-no-page-3"></span>
+        </div>
+      </div>
+    </header>
+    <div class="disclaimer">
+      <p><strong>Disclaimer:</strong> All pricing presented in this proposal is based on the November 2024 FDOT Asphalt Index and reflects material and labor costs as of that time. However, due to the significant cost fluctuations in 2025, we are unable to fully honor the 2024 rates in their entirety. While we strive to maintain transparency and consistency, market volatility has affected base materials, asphalt supply, transportation, and labor costs industry-wide.</p>
+      <p>That said, West Palm Beach Asphalt Paving is committed to working collaboratively with you to ensure you receive the highest quality materials, craftsmanship, and service at the most competitive and fair pricing available. Our goal is to deliver exceptional value without compromising project standards or timeline expectations.</p>
+      <p>All the work is to be completed in a substantial and workmanlike manner for the sum of Payment to be made: Fifty percent down, the entire amount of the contract is to be after completion. All work and labor warranted for two years. Any alterations or deviation from the above specifications involving extra cost of material or labor will be executed upon written order for same and will become an extra charge over the sum mentioned in this contract. All agreements must be made in writing. [* Note: Processing fees, Permit fees, or testing fees not included in this price]</p>
+      <div class="sign-row">
+        <div class="sign-line">
+          <span>Authorized Signature</span>
+          <span class="rule"></span>
+        </div>
+        <div class="sign-line date">
+          <span>Date:</span>
+          <span class="rule"></span>
+        </div>
+      </div>
+    </div>
+    <p class="page-number">Page 3</p>
+  </article>
+
+  <article class="sheet terms-page">
+    <header class="top">
+      <div class="brand-lockup">
+        <img class="logo" src="logo.webp" alt="All American Asphalt, LLC. From Start to Finish.">
+        <address class="hq">
+          <div>1645 Palm Beach Lakes Blvd</div>
+          <div>Suite 1200</div>
+          <div>West Palm Beach FL 33401</div>
+          <div>(561) 684-9183</div>
+          <div>Fax: (561) 684-9536</div>
+          <div>allamericanasphaltpaving.com</div>
+        </address>
+      </div>
+      <div class="cover-meta">
+        <div class="meta-line">
+          <span class="k">Date</span>
+          <input class="v page-date" id="page-date-4" type="date" aria-label="Invoice date">
+        </div>
+        <div class="meta-line">
+          <span class="k">Invoice</span>
+          <span class="v invoice-mirror" id="invoice-no-page-4"></span>
+        </div>
+      </div>
+    </header>
+    <h2 class="terms-title">Terms and Conditions</h2>
+    <ol class="terms">
+      <li>Our proposals are limited to the items specified; anything not explicitly included is excluded from the contract. Any changes to the proposal specifications will be at the customer's request and discussed beforehand.</li>
+      <li>The proposal or contract provided, including all stated terms and conditions, shall become a legally binding attachment to any contract entered into between West Palm-Beach Asphalt Paving Co and the financially responsible company for which the work will be performed.</li>
+      <li>90% of contract amount and change orders must be paid prior to completing the punch list items and/or any changes for additional work required by cities or municipalities.</li>
+      <li>For projects requiring city or county permits, West Palm Beach Asphalt Paving Co will coordinate the process and does not charge any additional fees. The customer will be responsible for the cost of the permit. (This price includes 5% allowance towards the permit fees)</li>
+      <li>Change orders, additions or extras requested by Owner, Contractor or municipality will be invoiced as an addition to the contract and shall not delay payment of the original contract sum. All change orders must be approved and signed by authorized representatives.</li>
+      <li>It is understood and agreed that all work is performed "weather permitting".</li>
+      <li>Tow trucks need to be arranged 5 days prior to the start of work and must be on call to remove cars from the scheduled work zone as necessary. The customer is responsible for towing services and any created delays. If any cars are left in the work area, West Palm Beach Asphalt Paving cannot be held responsible for any damage to the vehicle.</li>
+      <li>The customer is responsible for notifying all landscapers and garbage companies to not show on the area of work the day we are performing the work. In the event of a rescheduling due to unforeseen conditions, you are required to let all service providers know about the charge.</li>
+      <li>Reflective pavement markers are excluded from the warranty.</li>
+      <li>If All American Asphalt LLC is performing milling and/or paving, the customer acknowledges that this work will not result in new elevations/grades. This means that any existing ponding water will not be rectified by performing this scope of work. It is the customer's responsibility to notify the account manager if there is ponding water. The only method to improve standing water is to perform additional rock and grading work, which can be discussed with customers.</li>
+      <li>All American Asphalt LLC cannot guarantee 100% drainage in areas where the design grade is less than 1% fall.</li>
+      <li>Crack Sealing: Hairline cracks, alligatored or spider web-cracks or other failing asphalt areas, cannot and will not be crack sealed. Crack sealing is designed to keep water out, not in, so groundwater is subject to seep from wet areas.</li>
+      <li>All American Asphalt LLC takes responsibility for any damage to any underground utilities including electrical, plumbing, and irrigation lines.</li>
+      <li>All American Asphalt LLC will not be responsible for trafficking, paint tracking, or damage to cars or persons trespassing in designated construction areas.</li>
+      <li>All American Asphalt LLC recommends a Civil Engineer be retained for ADA upgrades. As such All American Asphalt LLC makes no claim that existing or ADA upgrade will meet any/all local, state, and federal guidelines on ADA compliance.</li>
+      <li>The prices used in this proposal are based on the condition that all work quoted will be accepted in total.</li>
+      <li>In the event of any litigation or other proceeding arising out of this agreement, the prevailing party shall be entitled to collect its attorneys' fees and all costs of litigation from the other party, including appellate attorney fees.</li>
+      <li>All accounts past due will incur a finance charge 1.5% per month.</li>
+      <li>PAVING: Barricaded Parking Lot. It is vital that all vehicles are removed from our area of work no later than 7:15am, unless otherwise agreed. As you can imagine, our project costs are based on the property having all cars, people and objects off the area of work. Tow trucks need to be arranged 5 days prior to the start of any work and must be on call to remove cars from the scheduled work zone. If any cars are left on the area of work, we cannot be held responsible for any damage to the vehicles.</li>
+    </ol>
+    <p class="page-number">Page 4</p>
+  </article>
+
+  <article class="sheet terms-more">
+    <header class="top">
+      <div class="brand-lockup">
+        <img class="logo" src="logo.webp" alt="All American Asphalt, LLC. From Start to Finish.">
+        <address class="hq">
+          <div>1645 Palm Beach Lakes Blvd</div>
+          <div>Suite 1200</div>
+          <div>West Palm Beach FL 33401</div>
+          <div>(561) 684-9183</div>
+          <div>Fax: (561) 684-9536</div>
+          <div>allamericanasphaltpaving.com</div>
+        </address>
+      </div>
+      <div class="cover-meta">
+        <div class="meta-line">
+          <span class="k">Date</span>
+          <input class="v page-date" id="page-date-5" type="date" aria-label="Invoice date">
+        </div>
+        <div class="meta-line">
+          <span class="k">Invoice</span>
+          <span class="v invoice-mirror" id="invoice-no-page-5"></span>
+        </div>
+      </div>
+    </header>
+    <ol class="terms" start="20">
+      <li>RAIN: if its raining the day of the scheduled service, assume we aren't coming and we will contact you to reschedule as soon as possible. If it rains after our installation, please contact your representative. We monitor the weather closely and can generally predict accurately.</li>
+      <li>Sprinklers should be off 24 hours prior until 48 hours after service. Avoid lawn cutting during this same period of time. The surface must be dry for our arrival.</li>
+      <li>DRAINAGE: All American Asphalt LLC cannot guarantee 100% drainage in areas where the design grade is less than 1% fall.</li>
+      <li>All American Asphalt LLC will not accept responsibility for reflective cracking of new asphalt overlay due to the cracked condition of the existing asphalt pavement.</li>
+      <li>LINE STRIPING: Line stripping will match all existing pavement markings unless changes are approved by the customer and municipality.</li>
+      <li>If existing curbs are flaking, it is not recommended to re-paint them without sand-blasting or power washing them first. All American Asphalt LLC will not be held responsible for flaking if proper procedure is not taken prior to painting.</li>
+    </ol>
+    <h2 class="terms-title warranty-title">Warranty and Conditions</h2>
+    <ol class="terms">
+      <li>This proposal is valid for 30 days. The price may change after 30 days and will be discussed beforehand with the customer.</li>
+      <li>All material is guaranteed to be installed exactly as specified.</li>
+      <li>All American Asphalt LLC reserves the right to withdraw the contract at any time prior to the commencement of work should material price fluctuations rise significantly.</li>
+      <li value="5">All American Asphalt LLC takes pride in our work and we are confident in the work we offer. The warranty provided is a Golden Warranty, valid for a</li>
+    </ol>
+    <div class="warranty-extra">
+      <p>COMPANY WARRANTS ITS WORK AGAINST ALL DEFICIENCIES AND DEFECTS IN MATERIALS AND/OR WORKMANSHIP AND AGREES TO SATISFY SAME WITHOUT COST TO CUSTOMER FOR A PERIOD OF TWO YEARS FROM THE DATE OF COMPLETION OF THE JOB.</p>
+      <p>PRICE DOES NOT INCLUDE PROCESSING FEES / PERMITS / TESTING / OR DRAWINGS.</p>
+      <p>Any work performed on asphalt paving by anyone other than by this Company, shall void the warranty.</p>
+      <p>Company recommends that seal-coating be applied to the new asphalt surface, on an annual basis, with an asphalt based sealer, in order to protect the composition/integrity of the asphalt paving. Application of seal-coating by anyone, other than by this company, shall void the warranty.</p>
+      <p>Company is not responsible for weed control, reflective cracking of surface, water drainage requirements, landscape restoration or for damaging any irrigation systems, pipes, cables, utility lines etc. in the installation of asphalt.</p>
+      <p>TO PROMOTE ASPHALT CURING, THERE MUST BE A MINIMUM OF 48 HOURS BEFORE RESURFACING AND NO VEHICLES ARE TO BE DRIVEN OVER/PARKED ON NEW ASPHALT SURFACE FOR AT LEAST 72 HOURS. Customer will be responsible for payment of any additional costs to correct any problem associated with this situation. Customer will be responsible for payment of a flat fee charge of $500.00 for each, extra mobilization in the event that Company, through no fault of its own, must return to customer's work site to start/complete work under this Agreement.</p>
+      <div class="sign-row">
+        <div class="sign-line">
+          <span>Authorized Signature</span>
+          <span class="rule"></span>
+        </div>
+      </div>
+    </div>
+    <p class="page-number">Page 5</p>
+  </article>
+
+  <article class="sheet accept-page">
+    <header class="top">
+      <div class="brand-lockup">
+        <img class="logo" src="logo.webp" alt="All American Asphalt, LLC. From Start to Finish.">
+        <address class="hq">
+          <div>1645 Palm Beach Lakes Blvd</div>
+          <div>Suite 1200</div>
+          <div>West Palm Beach FL 33401</div>
+          <div>(561) 684-9183</div>
+          <div>Fax: (561) 684-9536</div>
+          <div>allamericanasphaltpaving.com</div>
+        </address>
+      </div>
+      <div class="cover-meta">
+        <div class="meta-line">
+          <span class="k">Date</span>
+          <input class="v page-date" id="page-date-6" type="date" aria-label="Invoice date">
+        </div>
+        <div class="meta-line">
+          <span class="k">Invoice</span>
+          <span class="v invoice-mirror" id="invoice-no-page-6"></span>
+        </div>
+      </div>
+    </header>
+    <div class="accept-block">
+      <div class="accept-label">Proposal Total</div>
+      <div class="accept-copy">
+        <p>All American Asphalt, LLC proposes to furnish the material and perform the labor necessary for the completion of project in accordance to specifications, and subject to the terms and conditions stated herein for the sum of:</p>
+        <p class="accept-sum">$ <span class="price-mirror"></span></p>
+        <p class="accept-note">* this price excludes any options.</p>
+        <p class="accept-payee">Checks payable to ALL AMERICAN ASPHALT, LLC</p>
+      </div>
+    </div>
+    <div class="accept-block">
+      <div class="accept-label">Authorization to Proceed &amp; Contract</div>
+      <div class="accept-copy">
+        <p>All prices quoted are subject to change based on market conditions. This proposal price is based on work being completed during the hours of 7:00 AM and 6:00 PM, Monday–Thursday, Friday 7:00 AM – 12:00 PM excluding holidays, nights and weekends. Additional fees will apply if work is required to be completed on holidays, at night or on the weekends. Please contact your sales representative for details.</p>
+        <p>ACCEPTED: Prices, specifications, terms and conditions are hereby accepted and agreed to by the customer. You are authorized to do the work as specified. Customer agrees to pay the total sum or balance in full upon completion of this project. Payment will be made as outlined below. When signed, this proposal becomes a legally binding contract between All American Asphalt, LLC and the Customer. E&amp;OE</p>
+        <p>A signed proposal and deposit are required prior to the scheduling of the work.</p>
+      </div>
+    </div>
+    <div class="accept-block">
+      <div class="accept-label">Payment Terms</div>
+      <p class="accept-copy accept-terms">30% Deposit | 30% Upon Commencement | 30% Substantial Completion | 10% Completion</p>
+    </div>
+    <div class="accept-signs">
+      <div>
+        <div class="accept-party">All American Asphalt, LLC</div>
+        <div class="accept-field">
+          <div class="rule"></div>
+          <div class="cap">Authorized Signature</div>
+        </div>
+        <div class="accept-field">
+          <div class="rule"></div>
+          <div class="cap">Paving Advisor Printed Name</div>
+        </div>
+        <div class="accept-field">
+          <div class="rule"></div>
+          <div class="cap">Date</div>
+        </div>
+      </div>
+      <div>
+        <div class="accept-party customer-mirror"></div>
+        <div class="accept-field">
+          <div class="rule"></div>
+          <div class="cap">Signature of Approval by Customer</div>
+        </div>
+        <div class="accept-field">
+          <div class="rule"></div>
+          <div class="cap">Printed Name &amp; Title/Position</div>
+        </div>
+        <div class="accept-field">
+          <div class="rule"></div>
+          <div class="cap">Date</div>
+        </div>
+      </div>
+    </div>
+    <label class="billing-diff">
+      <input type="checkbox" id="billing-differs">
+      <span>Please select if billing information differs from above.</span>
+    </label>
+    <footer class="band">
+      <div class="band-rule" aria-hidden="true"></div>
+      <div class="band-main">
+        <div class="office">
+          <div class="band-kicker">Office</div>
+          <strong>All American Asphalt, LLC</strong>
+          <span class="footer-mirror" data-source="office-street" data-placeholder="Street address" data-empty="true"></span>
+          <span class="footer-mirror" data-source="office-city" data-placeholder="City, State ZIP" data-empty="true"></span>
+        </div>
+        <div class="slogan">
+          <div class="giving">“From Start to Finish”</div>
+          <div class="site">allamericanasphaltpaving.com</div>
+        </div>
+        <div class="advisor">
+          <div class="band-kicker">Estimator</div>
+          <div class="contact-line">
+            <span class="tag">Name</span>
+            <span class="footer-mirror" data-source="estimator-name" data-placeholder="Full name" data-empty="true"></span>
+          </div>
+          <div class="contact-line">
+            <span class="tag">Phone</span>
+            <span class="footer-mirror" data-source="estimator-phone" data-placeholder="(000) 000-0000" data-empty="true"></span>
+          </div>
+          <div class="contact-line">
+            <span class="tag">Email</span>
+            <span class="footer-mirror" data-source="estimator-email" data-placeholder="name@email.com" data-empty="true"></span>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <p class="page-number">Page 6</p>
+  </article>
+  <div class="page-nav noprint">
+    <button type="button" class="page-turn back" id="prev-page" disabled>Back</button>
+    <button type="button" class="page-turn" id="next-page">Next</button>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="invoice-store.js"></script>
+  <script>
+    const scopeItems = [
+      "Mobilization & Setup",
+      "Surface Cleaning & Parking Lot Preparation – Three Lots",
+      "Sinkhole Excavation & Sub-Base Inspection",
+      "Bump Milling",
+      "Car Stop Removal & Replacement",
+      "Tack Coat Application",
+      "Asphalt Installation",
+      "Bush Installation/Root Removal",
+      "Pavement Striping – All Parking Lots",
+      "Cleanup & Disposal"
+    ];
+
+    const starterBullets = {
+      "Mobilization & Setup": [
+        "Includes transportation of all necessary equipment, crew mobilization, and setup of safety barriers, lighting, and signage.",
+        "Coordination with customer for access and staging."
+      ],
+      "Surface Cleaning & Parking Lot Preparation – Three Lots": [
+        "Clean and prepare all three parking lots for paving operations. Remove loose debris."
+      ]
+    };
+
+    function markEmpty(el) {
+      el.dataset.empty = el.textContent.trim() ? "false" : "true";
+    }
+
+    function watch(el) {
+      markEmpty(el);
+      el.addEventListener("input", () => markEmpty(el));
+    }
+
+    document.querySelectorAll("[contenteditable='true']").forEach(watch);
+
+    function formatPhone(value) {
+      const digits = String(value || "").replace(/\D/g, "").slice(0, 10);
+      let formatted = "";
+      if (digits.length > 0) formatted = "(" + digits.slice(0, 3);
+      if (digits.length >= 3) formatted += ")";
+      if (digits.length >= 4) formatted += " " + digits.slice(3, 6);
+      if (digits.length >= 7) formatted += "-" + digits.slice(6);
+      return formatted;
+    }
+
+    function caretDigitCount(el) {
+      const sel = window.getSelection();
+      if (!sel.rangeCount || !el.contains(sel.anchorNode)) return null;
+      const range = sel.getRangeAt(0).cloneRange();
+      range.selectNodeContents(el);
+      range.setEnd(sel.getRangeAt(0).endContainer, sel.getRangeAt(0).endOffset);
+      return range.toString().replace(/\D/g, "").length;
+    }
+
+    function setCaretAfterDigits(el, count) {
+      const node = el.firstChild;
+      if (!node) return;
+      const text = node.textContent;
+      let digits = 0;
+      let offset = text.length;
+      for (let i = 0; i < text.length; i++) {
+        if (/\d/.test(text[i])) digits += 1;
+        if (digits >= count) {
+          offset = i + 1;
+          break;
+        }
+      }
+      const range = document.createRange();
+      range.setStart(node, Math.min(offset, text.length));
+      range.collapse(true);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    }
+
+    const estimatorPhone = document.getElementById("estimator-phone");
+    estimatorPhone.addEventListener("input", () => {
+      const digitsBefore = caretDigitCount(estimatorPhone);
+      const formatted = formatPhone(estimatorPhone.textContent);
+      if (estimatorPhone.textContent !== formatted) {
+        estimatorPhone.textContent = formatted;
+        if (digitsBefore != null) setCaretAfterDigits(estimatorPhone, digitsBefore);
+      }
+      markEmpty(estimatorPhone);
+    });
+
+    ["office-street", "office-city", "estimator-name", "estimator-phone", "estimator-email"].forEach((id) => {
+      document.getElementById(id).addEventListener("input", syncPageHeader);
+    });
+
+    const coverDate = document.getElementById("cover-date");
+    coverDate.addEventListener("click", () => {
+      try {
+        if (typeof coverDate.showPicker === "function") coverDate.showPicker();
+      } catch (err) {}
+    });
+
+    const projectPhone = document.getElementById("project-phone");
+    projectPhone.addEventListener("input", () => {
+      projectPhone.value = formatPhone(projectPhone.value);
+    });
+
+    const priceScope = document.getElementById("price-scope");
+
+    function formatPriceInput(value) {
+      const cleaned = value.replace(/[^\d.]/g, "");
+      const dot = cleaned.indexOf(".");
+      let whole = dot === -1 ? cleaned : cleaned.slice(0, dot);
+      const frac = dot === -1 ? "" : cleaned.slice(dot + 1).replace(/\./g, "").slice(0, 2);
+      whole = whole.replace(/^0+(?=\d)/, "");
+      const withCommas = whole.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      if (dot === -1) return withCommas;
+      return (withCommas || "0") + "." + frac;
+    }
+
+    priceScope.addEventListener("input", () => {
+      const formatted = formatPriceInput(priceScope.value);
+      if (priceScope.value !== formatted) priceScope.value = formatted;
+      syncPageHeader();
+    });
+
+    const photos = [];
+    let photoIndex = 0;
+    const photoInput = document.getElementById("photo-input");
+    const carousel = document.getElementById("carousel");
+    const photoCount = document.getElementById("photo-count");
+    const photoThumbs = document.getElementById("photo-thumbs");
+    const printPhotos = document.getElementById("print-photos");
+    const lightbox = document.getElementById("lightbox");
+    const lightboxView = document.getElementById("lightbox-view");
+
+    function syncLightbox() {
+      if (lightbox.hidden || !photos.length) return;
+      const current = photos[photoIndex];
+      lightboxView.src = current.url;
+      lightboxView.alt = current.name;
+    }
+
+    function openLightbox() {
+      if (!photos.length) return;
+      lightbox.hidden = false;
+      syncLightbox();
+    }
+
+    function closeLightbox() {
+      lightbox.hidden = true;
+      lightboxView.removeAttribute("src");
+    }
+
+    function renderPhotos() {
+      if (!photos.length) {
+        carousel.hidden = true;
+        printPhotos.replaceChildren();
+        closeLightbox();
+        return;
+      }
+      carousel.hidden = false;
+      if (photoIndex >= photos.length) photoIndex = photos.length - 1;
+      syncLightbox();
+      photoCount.textContent = photos.length + (photos.length === 1 ? " photo" : " photos");
+      photoThumbs.replaceChildren();
+      printPhotos.replaceChildren();
+      photos.forEach((photo, index) => {
+        const thumb = document.createElement("button");
+        thumb.type = "button";
+        thumb.setAttribute("aria-label", "Show photo " + (index + 1));
+        if (index === photoIndex) thumb.setAttribute("aria-current", "true");
+        const thumbImg = document.createElement("img");
+        thumbImg.src = photo.url;
+        thumbImg.alt = "";
+        thumb.append(thumbImg);
+        thumb.addEventListener("click", () => {
+          photoIndex = index;
+          renderPhotos();
+          openLightbox();
+        });
+        photoThumbs.append(thumb);
+
+        const printed = document.createElement("img");
+        printed.src = photo.url;
+        printed.alt = photo.name;
+        printPhotos.append(printed);
+      });
+    }
+
+    photoInput.addEventListener("change", () => {
+      Array.from(photoInput.files).forEach((file) => {
+        photos.push({ url: URL.createObjectURL(file), name: file.name, blob: file });
+      });
+      if (photos.length) photoIndex = photos.length - 1;
+      photoInput.value = "";
+      renderPhotos();
+    });
+
+    document.getElementById("lightbox-close").addEventListener("click", closeLightbox);
+    document.getElementById("lightbox-download").addEventListener("click", () => {
+      const photo = photos[photoIndex];
+      if (!photo) return;
+      const link = document.createElement("a");
+      link.href = photo.url;
+      link.download = photo.name || "photo";
+      link.click();
+    });
+    lightbox.addEventListener("click", (event) => {
+      if (event.target === lightbox) closeLightbox();
+    });
+    document.getElementById("lightbox-prev").addEventListener("click", () => {
+      if (!photos.length) return;
+      photoIndex = (photoIndex - 1 + photos.length) % photos.length;
+      renderPhotos();
+    });
+    document.getElementById("lightbox-next").addEventListener("click", () => {
+      if (!photos.length) return;
+      photoIndex = (photoIndex + 1) % photos.length;
+      renderPhotos();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (lightbox.hidden) return;
+      if (event.key === "Escape") closeLightbox();
+      if (event.key === "ArrowLeft") document.getElementById("lightbox-prev").click();
+      if (event.key === "ArrowRight") document.getElementById("lightbox-next").click();
+    });
+
+    priceScope.addEventListener("blur", () => {
+      if (priceScope.value && priceScope.value !== ".") {
+        const amount = Number(priceScope.value.replace(/,/g, ""));
+        if (Number.isFinite(amount)) {
+          priceScope.value = amount.toLocaleString("en-US", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+          });
+        }
+      }
+      syncPageHeader();
+    });
+
+    const invoiceNo = document.getElementById("invoice-no");
+    const invoiceNextKey = "aaa-invoice-next";
+    const invoiceCurrentKey = "aaa-invoice-current";
+
+    function syncPageHeader() {
+      document.querySelectorAll("input.page-date").forEach((input) => {
+        if (document.activeElement === input) return;
+        input.value = coverDate.value;
+      });
+      document.querySelectorAll(".invoice-mirror").forEach((el) => {
+        el.textContent = invoiceNo.textContent;
+      });
+      const price = priceScope.value.trim();
+      document.querySelectorAll(".price-mirror").forEach((el) => {
+        el.textContent = price || "0.00";
+      });
+      const customer = document.querySelector('input[name="customer"]').value.trim();
+      document.querySelectorAll(".customer-mirror").forEach((el) => {
+        el.textContent = customer;
+      });
+      ["office-street", "office-city", "estimator-name", "estimator-phone", "estimator-email"].forEach((id) => {
+        const source = document.getElementById(id);
+        if (!source) return;
+        const text = source.textContent;
+        document.querySelectorAll('.footer-mirror[data-source="' + id + '"]').forEach((el) => {
+          el.textContent = text;
+          el.dataset.empty = text.trim() ? "false" : "true";
+        });
+      });
+    }
+
+    coverDate.addEventListener("input", syncPageHeader);
+    coverDate.addEventListener("change", syncPageHeader);
+    document.querySelector('input[name="customer"]').addEventListener("input", syncPageHeader);
+    document.querySelectorAll("input.page-date").forEach((input) => {
+      input.addEventListener("input", () => {
+        coverDate.value = input.value;
+        syncPageHeader();
+      });
+      input.addEventListener("change", () => {
+        coverDate.value = input.value;
+        syncPageHeader();
+      });
+      input.addEventListener("click", () => {
+        try {
+          if (typeof input.showPicker === "function") input.showPicker();
+        } catch (err) {}
+      });
+    });
+
+    function formatInvoice(n) {
+      const year = new Date().getFullYear();
+      return year + "-" + String(n).padStart(4, "0");
+    }
+
+    function nextInvoiceNumber() {
+      const stored = Number(localStorage.getItem(invoiceNextKey));
+      const n = Number.isFinite(stored) && stored > 0 ? stored : 1;
+      localStorage.setItem(invoiceNextKey, String(n + 1));
+      return formatInvoice(n);
+    }
+
+    let currentId = null;
+    const pageParams = new URLSearchParams(location.search);
+
+    function showInvoice(forceNew) {
+      let current = sessionStorage.getItem(invoiceCurrentKey);
+      if (!current || forceNew) {
+        current = nextInvoiceNumber();
+        sessionStorage.setItem(invoiceCurrentKey, current);
+      }
+      invoiceNo.textContent = current;
+      syncPageHeader();
+    }
+
+    if (!pageParams.get("id") && pageParams.get("new") !== "1") showInvoice(false);
+
+    function addCheck(label, options) {
+      const opts = options || {};
+      const li = document.createElement("li");
+      const box = document.createElement("input");
+      box.type = "checkbox";
+      const text = document.createElement("span");
+      text.contentEditable = "true";
+      text.dataset.placeholder = "Scope item";
+      text.textContent = label || "";
+      const remove = document.createElement("button");
+      remove.type = "button";
+      remove.className = "row-x noprint";
+      remove.setAttribute("aria-label", "Remove line");
+      remove.textContent = "×";
+      const section = addDetail(opts.title != null ? opts.title : label, opts.bullets);
+      remove.addEventListener("click", () => {
+        li.remove();
+        section.remove();
+      });
+      li.append(box, text, remove);
+      document.getElementById("checks").append(li);
+      watch(text);
+      box.checked = !!opts.checked;
+      section.hidden = !box.checked;
+      box.addEventListener("change", () => {
+        section.hidden = !box.checked;
+      });
+      text.addEventListener("input", () => {
+        const heading = section.querySelector("h3");
+        if (heading) heading.textContent = text.textContent;
+      });
+      return text;
+    }
+
+    function addBullet(list, text) {
+      const li = document.createElement("li");
+      const span = document.createElement("span");
+      span.contentEditable = "true";
+      span.dataset.placeholder = "Describe what is included";
+      span.textContent = text || "";
+      const remove = document.createElement("button");
+      remove.type = "button";
+      remove.className = "bullet-x noprint";
+      remove.setAttribute("aria-label", "Remove bullet");
+      remove.textContent = "×";
+      remove.addEventListener("click", () => li.remove());
+      li.append(span, document.createTextNode(" "), remove);
+      list.append(li);
+      watch(span);
+    }
+
+    function addDetail(title, bullets) {
+      const section = document.createElement("section");
+      section.className = "detail";
+      const header = document.createElement("header");
+      const h3 = document.createElement("h3");
+      h3.contentEditable = "true";
+      h3.dataset.placeholder = "Section title";
+      h3.textContent = title || "";
+      const pill = document.createElement("span");
+      pill.className = "pill";
+      pill.textContent = "Included";
+
+      const ul = document.createElement("ul");
+      const lines = bullets && bullets.length ? bullets : [""];
+      lines.forEach((line) => addBullet(ul, line));
+
+      const add = document.createElement("button");
+      add.type = "button";
+      add.className = "text-btn noprint";
+      add.textContent = "Add bullet";
+      add.addEventListener("click", () => addBullet(ul, ""));
+      header.append(h3, add, pill);
+
+      section.append(header, ul);
+      document.getElementById("details").append(section);
+      watch(h3);
+      return section;
+    }
+
+    scopeItems.forEach((item) => addCheck(item, { bullets: starterBullets[item] }));
+
+    document.getElementById("add-line").addEventListener("click", () => addCheck(""));
+    document.getElementById("add-detail").addEventListener("click", () => addCheck("", { checked: true }));
+    const outputToggle = document.getElementById("output-toggle");
+    const outputPanel = document.getElementById("output-panel");
+
+    function closeOutputMenu() {
+      outputPanel.hidden = true;
+      outputToggle.setAttribute("aria-expanded", "false");
+    }
+
+    outputToggle.addEventListener("click", () => {
+      const open = outputPanel.hidden;
+      outputPanel.hidden = !open;
+      outputToggle.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!outputToggle.parentElement.contains(event.target)) closeOutputMenu();
+    });
+
+    const prevPage = document.getElementById("prev-page");
+    const nextPage = document.getElementById("next-page");
+    let sheetIndex = 0;
+
+    function showSheet(index) {
+      sheetIndex = Math.max(0, Math.min(5, index));
+      document.body.classList.remove("page-next", "page-2", "page-3", "page-4", "page-5", "page-6");
+      if (sheetIndex > 0) document.body.classList.add("page-" + (sheetIndex + 1));
+      prevPage.disabled = sheetIndex === 0;
+      nextPage.disabled = false;
+      nextPage.textContent = sheetIndex === 5 ? "Finished" : "Next";
+      syncPageHeader();
+      window.scrollTo(0, 0);
+    }
+
+    function finishInvoice() {
+      const finishError = document.getElementById("finish-error");
+      const finishName = document.getElementById("finish-name");
+      finishError.hidden = true;
+      finishName.value = invoiceNo.textContent.trim();
+      document.getElementById("finish-confirm").hidden = false;
+      finishName.focus();
+      finishName.select();
+    }
+
+    nextPage.addEventListener("click", () => {
+      if (sheetIndex === 5) {
+        finishInvoice();
+        return;
+      }
+      showSheet(sheetIndex + 1);
+    });
+    prevPage.addEventListener("click", () => showSheet(sheetIndex - 1));
+
+    document.getElementById("print-invoice").addEventListener("click", () => {
+      closeOutputMenu();
+      window.print();
+    });
+
+    function blankCopy(root) {
+      root.querySelectorAll("input").forEach((input) => {
+        if (input.type === "checkbox") input.checked = false;
+        else if (input.type !== "file") input.value = "";
+      });
+      root.querySelectorAll("select").forEach((select) => { select.selectedIndex = 0; });
+      ["scope-text", "options-text", "proposal-no", "office-street", "office-city", "estimator-name", "estimator-phone", "estimator-email", "invoice-no"].forEach((id) => {
+        const el = root.querySelector("#" + id);
+        if (!el) return;
+        el.textContent = "";
+        if (el.hasAttribute("data-empty")) el.dataset.empty = "true";
+      });
+      root.querySelectorAll(".invoice-mirror").forEach((el) => { el.textContent = ""; });
+      root.querySelectorAll(".price-mirror").forEach((el) => { el.textContent = ""; });
+      root.querySelectorAll(".customer-mirror").forEach((el) => { el.textContent = ""; });
+      root.querySelectorAll(".footer-mirror").forEach((el) => {
+        el.textContent = "";
+        el.dataset.empty = "true";
+      });
+      root.querySelectorAll(".detail").forEach((section) => { section.hidden = true; });
+      const carousel = root.querySelector("#carousel");
+      if (carousel) carousel.hidden = true;
+      const thumbs = root.querySelector("#photo-thumbs");
+      if (thumbs) thumbs.replaceChildren();
+      const count = root.querySelector("#photo-count");
+      if (count) count.textContent = "";
+    }
+
+    document.getElementById("print-blank").addEventListener("click", () => {
+      closeOutputMenu();
+      const host = document.createElement("div");
+      host.className = "blank-print";
+      document.querySelectorAll(".sheet").forEach((sheet) => {
+        const copy = sheet.cloneNode(true);
+        blankCopy(copy);
+        copy.style.margin = "0";
+        copy.style.boxShadow = "none";
+        host.append(copy);
+      });
+      document.body.append(host);
+      document.body.classList.add("printing-blank");
+      const cleanup = () => {
+        document.body.classList.remove("printing-blank");
+        host.remove();
+        window.removeEventListener("afterprint", cleanup);
+      };
+      window.addEventListener("afterprint", cleanup);
+      window.print();
+    });
+
+    function copyLiveFields(source, copy) {
+      const sources = source.querySelectorAll("input, select, textarea");
+      const copies = copy.querySelectorAll("input, select, textarea");
+      sources.forEach((input, index) => {
+        const dest = copies[index];
+        if (!dest) return;
+        if (input.type === "checkbox" || input.type === "radio") dest.checked = input.checked;
+        else dest.value = input.value;
+      });
+      const sourceText = source.querySelectorAll("[contenteditable='true']");
+      const copyText = copy.querySelectorAll("[contenteditable='true']");
+      sourceText.forEach((el, index) => {
+        const dest = copyText[index];
+        if (!dest) return;
+        dest.textContent = el.textContent;
+        if (dest.hasAttribute("data-empty")) dest.dataset.empty = el.textContent.trim() ? "false" : "true";
+      });
+    }
+
+    function freezeControls(root) {
+      root.querySelectorAll("input, select, textarea").forEach((input) => {
+        if (input.type === "file" || input.type === "checkbox" || input.type === "radio" || input.type === "button" || input.type === "submit") return;
+        const span = document.createElement("span");
+        let text = "";
+        if (input.tagName === "SELECT") {
+          const option = input.selectedOptions && input.selectedOptions[0];
+          text = input.value && option ? option.textContent : "";
+        } else if (input.type === "date" && input.value) {
+          const parts = input.value.split("-");
+          text = parts.length === 3 ? parts[1] + "/" + parts[2] + "/" + parts[0] : input.value;
+        } else {
+          text = input.value || "";
+        }
+        span.textContent = text;
+        const computed = window.getComputedStyle(input);
+        span.style.display = "inline-block";
+        span.style.minHeight = "1.2em";
+        span.style.minWidth = "1.2em";
+        span.style.fontFamily = computed.fontFamily;
+        span.style.fontWeight = computed.fontWeight;
+        span.style.fontSize = computed.fontSize;
+        span.style.lineHeight = computed.lineHeight;
+        span.style.letterSpacing = computed.letterSpacing;
+        span.style.color = computed.color;
+        span.style.textAlign = computed.textAlign;
+        if (input.id === "price-scope") span.style.width = computed.width;
+        input.replaceWith(span);
+      });
+    }
+
+    function invoiceIsBlank() {
+      const named = ["customer", "street", "suite", "city", "state", "zip", "phone", "client-email"];
+      if (named.some((name) => fieldValue(name).trim())) return false;
+      if (coverDate.value || priceScope.value.trim()) return false;
+      const written = ["proposal-no", "scope-text", "options-text", "office-street", "office-city", "estimator-name", "estimator-phone", "estimator-email"];
+      if (written.some((id) => readText(id))) return false;
+      if (photos.some((photo) => photo.blob)) return false;
+      return true;
+    }
+
+    function mountExport(blank) {
+      const host = document.createElement("div");
+      host.className = "pdf-export";
+      document.querySelectorAll(".sheet").forEach((sheet) => {
+        const copy = sheet.cloneNode(true);
+        copyLiveFields(sheet, copy);
+        if (blank) blankCopy(copy);
+        copy.querySelectorAll(".noprint").forEach((el) => {
+          if (el.classList.contains("thumbs") || el.classList.contains("photo-count")) return;
+          el.remove();
+        });
+        copy.style.margin = "0";
+        copy.style.boxShadow = "none";
+        copy.style.display = "flex";
+        copy.style.flexDirection = "column";
+        copy.style.width = "8.5in";
+        copy.style.height = "10.98in";
+        copy.style.overflow = "hidden";
+        copy.style.background = "white";
+        copy.style.breakAfter = "page";
+        host.append(copy);
+      });
+      document.body.append(host);
+      freezeControls(host);
+      return host;
+    }
+
+    function downloadBlob(blob, filename) {
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      document.body.append(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1500);
+    }
+
+    function pdfOptions(number) {
+      return {
+        margin: [0, 0, 0, 0],
+        filename: "Invoice-" + number + ".pdf",
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+        pagebreak: { mode: ["css"] }
+      };
+    }
+
+    document.getElementById("download-invoice").addEventListener("click", () => {
+      closeOutputMenu();
+      const blank = invoiceIsBlank();
+      const host = mountExport(blank);
+      const number = invoiceNo.textContent.trim() || "draft";
+      const filename = blank ? "Invoice-blank.pdf" : "Invoice-" + number + ".pdf";
+      const button = document.getElementById("download-invoice");
+      button.disabled = true;
+      html2pdf().set(pdfOptions(number)).from(host).outputPdf("blob").then((blob) => {
+        downloadBlob(blob, filename);
+      }).catch(() => {
+      }).then(() => {
+        host.remove();
+        button.disabled = false;
+      });
+    });
+
+    function setText(el, value) {
+      if (!el) return;
+      el.textContent = value || "";
+      markEmpty(el);
+    }
+
+    function readText(id) {
+      const el = document.getElementById(id);
+      return el ? el.textContent.trim() : "";
+    }
+
+    function fieldValue(name) {
+      const el = document.querySelector("[name='" + name + "']");
+      return el ? el.value : "";
+    }
+
+    function setField(name, value) {
+      const el = document.querySelector("[name='" + name + "']");
+      if (el) el.value = value || "";
+    }
+
+    function clearPhotos() {
+      photos.forEach((photo) => URL.revokeObjectURL(photo.url));
+      photos.length = 0;
+      photoIndex = 0;
+      renderPhotos();
+    }
+
+    function resetScopeTemplate() {
+      document.getElementById("checks").replaceChildren();
+      document.getElementById("details").replaceChildren();
+      scopeItems.forEach((item) => addCheck(item, { bullets: starterBullets[item] }));
+      setText(document.getElementById("coordination"), "Project Coordination");
+    }
+
+    function resetForm() {
+      ["customer", "street", "suite", "city", "state", "zip", "phone", "client-email"].forEach((name) => setField(name, ""));
+      coverDate.value = "";
+      priceScope.value = "";
+      setText(document.getElementById("proposal-no"), "");
+      setText(document.getElementById("scope-text"), "");
+      setText(document.getElementById("options-text"), "");
+      setText(document.getElementById("office-street"), "");
+      setText(document.getElementById("office-city"), "");
+      setText(document.getElementById("estimator-name"), "");
+      setText(document.getElementById("estimator-phone"), "");
+      setText(document.getElementById("estimator-email"), "");
+      clearPhotos();
+      resetScopeTemplate();
+      const billing = document.getElementById("billing-differs");
+      if (billing) billing.checked = false;
+      syncPageHeader();
+    }
+
+    function collectInvoice() {
+      return {
+        id: currentId || crypto.randomUUID(),
+        invoiceNo: invoiceNo.textContent.trim(),
+        date: coverDate.value,
+        price: priceScope.value.trim(),
+        customer: fieldValue("customer"),
+        street: fieldValue("street"),
+        suite: fieldValue("suite"),
+        city: fieldValue("city"),
+        state: fieldValue("state"),
+        zip: fieldValue("zip"),
+        phone: fieldValue("phone"),
+        clientEmail: fieldValue("client-email"),
+        proposal: readText("proposal-no"),
+        scope: readText("scope-text"),
+        options: readText("options-text"),
+        officeStreet: readText("office-street"),
+        officeCity: readText("office-city"),
+        estimatorName: readText("estimator-name"),
+        estimatorPhone: readText("estimator-phone"),
+        estimatorEmail: readText("estimator-email"),
+        billingDiffers: document.getElementById("billing-differs").checked,
+        coordination: readText("coordination"),
+        checks: [...document.querySelectorAll("#checks li")].map((li) => ({
+          label: li.querySelector("[contenteditable]").textContent,
+          checked: li.querySelector("input").checked
+        })),
+        details: [...document.querySelectorAll("#details .detail")].map((section) => ({
+          title: section.querySelector("h3").textContent,
+          bullets: [...section.querySelectorAll("li [contenteditable]")].map((span) => span.textContent)
+        })),
+        photos: photos.filter((photo) => photo.blob).map((photo) => ({
+          name: photo.name,
+          blob: photo.blob
+        }))
+      };
+    }
+
+    function applyInvoice(record) {
+      currentId = record.id;
+      invoiceNo.textContent = record.invoiceNo || "";
+      sessionStorage.setItem(invoiceCurrentKey, invoiceNo.textContent);
+      coverDate.value = record.date || "";
+      priceScope.value = record.price || "";
+      setField("customer", record.customer);
+      setField("street", record.street);
+      setField("suite", record.suite);
+      setField("city", record.city);
+      setField("state", record.state);
+      setField("zip", record.zip);
+      setField("phone", record.phone);
+      setField("client-email", record.clientEmail);
+      setText(document.getElementById("proposal-no"), record.proposal);
+      setText(document.getElementById("scope-text"), record.scope);
+      setText(document.getElementById("options-text"), record.options);
+      setText(document.getElementById("office-street"), record.officeStreet);
+      setText(document.getElementById("office-city"), record.officeCity);
+      setText(document.getElementById("estimator-name"), record.estimatorName);
+      setText(document.getElementById("estimator-phone"), formatPhone(record.estimatorPhone));
+      setText(document.getElementById("estimator-email"), record.estimatorEmail);
+      document.getElementById("billing-differs").checked = !!record.billingDiffers;
+      setText(document.getElementById("coordination"), record.coordination || "Project Coordination");
+      document.getElementById("checks").replaceChildren();
+      document.getElementById("details").replaceChildren();
+      const savedChecks = record.checks || [];
+      const savedDetails = record.details || [];
+      const count = Math.max(savedChecks.length, savedDetails.length);
+      for (let i = 0; i < count; i++) {
+        const check = savedChecks[i] || {};
+        const detail = savedDetails[i] || {};
+        addCheck(check.label != null ? check.label : (detail.title || ""), {
+          checked: !!check.checked,
+          title: detail.title,
+          bullets: detail.bullets
+        });
+      }
+      clearPhotos();
+      (record.photos || []).forEach((photo) => {
+        if (!photo.blob) return;
+        photos.push({
+          url: URL.createObjectURL(photo.blob),
+          name: photo.name || "Photo",
+          blob: photo.blob
+        });
+      });
+      photoIndex = 0;
+      renderPhotos();
+      syncPageHeader();
+    }
+
+    function invoiceEmailBody() {
+      const address = [fieldValue("street"), fieldValue("suite"), fieldValue("city"), fieldValue("state"), fieldValue("zip")].filter(Boolean).join(", ");
+      return [
+        "Invoice " + invoiceNo.textContent.trim(),
+        "Date: " + (coverDate.value || ""),
+        "Customer: " + fieldValue("customer"),
+        "Address: " + address,
+        "Phone: " + fieldValue("phone"),
+        "Amount: $" + (priceScope.value || "0.00"),
+        "",
+        "Scope of work:",
+        readText("scope-text"),
+        "",
+        "Options:",
+        readText("options-text"),
+        "",
+        "All American Asphalt, LLC",
+        "1645 Palm Beach Lakes Blvd Suite 1200",
+        "West Palm Beach FL 33401",
+        "(561) 684-9183",
+        "allamericanasphaltpaving.com"
+      ].join("\n");
+    }
+
+    document.getElementById("email-invoice").addEventListener("click", async () => {
+      const email = fieldValue("client-email").trim();
+      const emailField = document.getElementById("client-email");
+      if (!email || !email.includes("@")) {
+        emailField.focus();
+        return;
+      }
+      const button = document.getElementById("email-invoice");
+      const number = invoiceNo.textContent.trim() || "draft";
+      const filename = "Invoice-" + number + ".pdf";
+      const subject = "Invoice " + number + " from All American Asphalt";
+      const body = "Please find your invoice attached.\n\n" + invoiceEmailBody();
+      const host = mountExport(false);
+      button.disabled = true;
+      const label = button.textContent;
+      button.textContent = "Opening";
+      let blob = null;
+      try {
+        blob = await html2pdf().set(pdfOptions(number)).from(host).outputPdf("blob");
+        const file = new File([blob], filename, { type: "application/pdf" });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: subject,
+            text: "To: " + email + "\n\n" + body
+          });
+          return;
+        }
+        const bytes = new Uint8Array(await blob.arrayBuffer());
+        let binary = "";
+        for (let i = 0; i < bytes.length; i += 0x8000) {
+          binary += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+        }
+        const response = await fetch("/email-invoice", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            to: email,
+            subject: subject,
+            body: body,
+            filename: filename,
+            pdf: btoa(binary)
+          })
+        });
+        if (response.ok) return;
+        downloadBlob(blob, filename);
+        window.location.href = "mailto:" + encodeURIComponent(email) + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+      } catch (err) {
+        if (err && err.name === "AbortError") return;
+        if (blob) downloadBlob(blob, filename);
+      } finally {
+        host.remove();
+        button.disabled = false;
+        button.textContent = label;
+      }
+    });
+
+    const saveButton = document.getElementById("save-invoice");
+    const overwriteConfirm = document.getElementById("overwrite-confirm");
+
+    function saveInvoice(record) {
+      const next = record || collectInvoice();
+      saveButton.textContent = "Saving";
+      return InvoiceStore.save(next).then(() => {
+        currentId = next.id;
+        invoiceNo.textContent = next.invoiceNo;
+        syncPageHeader();
+        sessionStorage.setItem(invoiceCurrentKey, next.invoiceNo);
+        history.replaceState(null, "", "index.html?id=" + encodeURIComponent(next.id));
+        saveButton.textContent = "Saved";
+        setTimeout(() => { saveButton.textContent = "Save"; }, 1200);
+        return next;
+      }).catch(() => {
+        saveButton.textContent = "Save";
+        if (!newConfirm.hidden) return null;
+        showOverwriteError("Could not save this invoice.");
+        overwriteConfirm.hidden = false;
+        return null;
+      });
+    }
+
+    const overwriteName = document.getElementById("overwrite-name");
+    const overwriteError = document.getElementById("overwrite-error");
+
+    function copyNameFor(rows, base) {
+      const used = new Set(rows.map((row) => row.invoiceNo));
+      let name = base + " copy";
+      let n = 2;
+      while (used.has(name)) {
+        name = base + " copy " + n;
+        n += 1;
+      }
+      return name;
+    }
+
+    function openOverwritePrompt() {
+      overwriteError.hidden = true;
+      const base = invoiceNo.textContent.trim();
+      overwriteName.value = base + " copy";
+      overwriteConfirm.hidden = false;
+      overwriteName.focus();
+      overwriteName.select();
+      InvoiceStore.list().then((rows) => {
+        if (overwriteConfirm.hidden) return;
+        const typed = overwriteName.value.trim();
+        if (typed !== base + " copy" && typed !== base) return;
+        overwriteName.value = copyNameFor(rows, base);
+        overwriteName.select();
+      }).catch(() => {});
+    }
+
+    function showOverwriteError(message) {
+      overwriteError.textContent = message;
+      overwriteError.hidden = false;
+    }
+
+    saveButton.addEventListener("click", () => {
+      if (currentId) {
+        openOverwritePrompt();
+        return;
+      }
+      saveInvoice();
+    });
+
+    document.getElementById("overwrite-yes").addEventListener("click", () => {
+      overwriteConfirm.hidden = true;
+      saveInvoice();
+    });
+
+    document.getElementById("overwrite-no").addEventListener("click", () => {
+      overwriteConfirm.hidden = true;
+    });
+
+    function saveCopy() {
+      const name = overwriteName.value.trim();
+      const currentName = invoiceNo.textContent.trim();
+      if (!name) {
+        showOverwriteError("Enter a name for the copy.");
+        overwriteName.focus();
+        return;
+      }
+      if (name === currentName) {
+        showOverwriteError("Use a different name so the original stays saved.");
+        overwriteName.focus();
+        return;
+      }
+      InvoiceStore.list().then((rows) => {
+        const taken = rows.some((row) => row.invoiceNo === name);
+        if (taken) {
+          overwriteName.value = copyNameFor(rows, currentName);
+          showOverwriteError("That name is already used. A free name is filled in.");
+          overwriteName.focus();
+          overwriteName.select();
+          return;
+        }
+        const copy = collectInvoice();
+        copy.id = crypto.randomUUID();
+        copy.invoiceNo = name;
+        overwriteConfirm.hidden = true;
+        saveInvoice(copy);
+      }).catch(() => {
+        showOverwriteError("Could not check saved invoices.");
+      });
+    }
+
+    document.getElementById("overwrite-rename").addEventListener("click", saveCopy);
+    overwriteName.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        saveCopy();
+      }
+    });
+
+    document.getElementById("new-invoice").addEventListener("click", () => {
+      newError.hidden = true;
+      newName.value = invoiceNo.textContent.trim();
+      newConfirm.hidden = false;
+      newName.focus();
+      newName.select();
+    });
+
+    const newConfirm = document.getElementById("new-confirm");
+    const newName = document.getElementById("new-name");
+    const newError = document.getElementById("new-error");
+
+    function showNewError(message) {
+      newError.textContent = message;
+      newError.hidden = false;
+    }
+
+    function startBlankInvoice() {
+      newConfirm.hidden = true;
+      currentId = null;
+      history.replaceState(null, "", "index.html");
+      showInvoice(true);
+      resetForm();
+    }
+
+    function saveThenStartNew() {
+      const name = newName.value.trim();
+      const currentName = invoiceNo.textContent.trim();
+      if (!name) {
+        showNewError("Enter a name.");
+        newName.focus();
+        return;
+      }
+      InvoiceStore.list().then((rows) => {
+        const taken = rows.some((row) => row.invoiceNo === name && row.id !== currentId);
+        if (taken) {
+          showNewError("That name is already used.");
+          newName.focus();
+          newName.select();
+          return;
+        }
+        const record = collectInvoice();
+        if (!currentId || name !== currentName) {
+          record.id = crypto.randomUUID();
+          record.invoiceNo = name;
+        }
+        saveInvoice(record).then((saved) => {
+          if (!saved) {
+            showNewError("Could not save this invoice.");
+            return;
+          }
+          startBlankInvoice();
+        });
+      }).catch(() => {
+        showNewError("Could not check saved invoices.");
+      });
+    }
+
+    document.getElementById("new-cancel").addEventListener("click", () => {
+      newConfirm.hidden = true;
+    });
+    document.getElementById("new-start").addEventListener("click", startBlankInvoice);
+    document.getElementById("new-save").addEventListener("click", saveThenStartNew);
+    newName.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        saveThenStartNew();
+      }
+    });
+
+    const finishConfirm = document.getElementById("finish-confirm");
+    const finishName = document.getElementById("finish-name");
+    const finishError = document.getElementById("finish-error");
+
+    function showFinishError(message) {
+      finishError.textContent = message;
+      finishError.hidden = false;
+    }
+
+    function saveFinishedInvoice() {
+      const name = finishName.value.trim();
+      const currentName = invoiceNo.textContent.trim();
+      if (!name) {
+        showFinishError("Enter a file name.");
+        finishName.focus();
+        return;
+      }
+      InvoiceStore.list().then((rows) => {
+        const taken = rows.some((row) => row.invoiceNo === name && row.id !== currentId);
+        if (taken) {
+          showFinishError("That name is already used.");
+          finishName.focus();
+          finishName.select();
+          return;
+        }
+        const record = collectInvoice();
+        if (!currentId || name !== currentName) {
+          record.id = crypto.randomUUID();
+          record.invoiceNo = name;
+        }
+        saveInvoice(record).then((saved) => {
+          if (!saved) {
+            showFinishError("Could not save this invoice.");
+            return;
+          }
+          finishConfirm.hidden = true;
+          startBlankInvoice();
+          showSheet(0);
+        });
+      }).catch(() => {
+        showFinishError("Could not check saved invoices.");
+      });
+    }
+
+    document.getElementById("finish-cancel").addEventListener("click", () => {
+      finishConfirm.hidden = true;
+    });
+    document.getElementById("finish-save").addEventListener("click", saveFinishedInvoice);
+    finishName.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        saveFinishedInvoice();
+      }
+    });
+
+    if (pageParams.get("new") === "1") {
+      history.replaceState(null, "", "index.html");
+      showInvoice(true);
+      resetForm();
+    } else if (pageParams.get("id")) {
+      InvoiceStore.get(pageParams.get("id")).then((record) => {
+        if (record) applyInvoice(record);
+        else showInvoice(false);
+      });
+    }
+
+    window.addEventListener("beforeprint", () => {
+      if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+    });
+  </script>
+</body>
+</html>
