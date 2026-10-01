@@ -120,9 +120,10 @@
     }
 
     .cover {
-      padding: 0.42in 0.48in 0.12in;
+      padding: 0.42in 0.48in 0.22in;
       display: flex;
       flex-direction: column;
+      height: 11.7in;
     }
 
     .continuation,
@@ -170,39 +171,39 @@
       flex-direction: column;
     }
 
-    .cover > .grow:has(#scope-text) {
+    .cover > .grow:has(#checks) {
       flex: 0 0 auto;
-      min-height: auto;
+    }
+
+    .cover > .grow:has(#options-text) {
+      flex: 0 0 auto;
+      margin-top: 4px;
     }
 
     .cover .scope-wrap {
       flex: 0 0 auto;
-      min-height: auto;
-      margin-top: 6px;
-      grid-template-rows: auto auto;
-    }
-
-    .cover .writing {
       min-height: 0;
-      overflow: auto;
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
     }
 
-    .cover #scope-text {
-      min-height: 0.7in;
-      overflow: visible;
+    .cover .scope-editor {
+      flex: 0 0 auto;
     }
 
     .cover #options-text {
-      flex: 1 1 auto;
-      min-height: 0;
+      flex: 0 0 auto;
+      min-height: 1.55in;
     }
 
     .cover .band { margin-top: 10px; }
-    .cover .page-number { margin-top: 18px; }
+    .cover .page-number { margin-top: auto; }
 
     .continuation .sheet-body {
       flex: 1 1 auto;
       min-height: 0;
+      margin-top: 22px;
       overflow: auto;
     }
 
@@ -318,12 +319,7 @@
 
     .accept-page > .accept-block:first-of-type { margin-top: 36px; }
 
-    .accept-page > .band {
-      margin-top: auto;
-      flex-shrink: 0;
-    }
-
-    .accept-page > .page-number { margin-top: 12px; }
+    .accept-page > .page-number { margin-top: auto; }
 
     .footer-mirror {
       display: block;
@@ -386,6 +382,18 @@
     }
 
     .accept-terms { font-weight: 700; padding-top: 6px; }
+
+    .payment-field {
+      margin-top: 0;
+      min-height: 0.62in;
+      border: 1px solid #c5d0e4;
+      padding: 6px 8px;
+      font-size: 13px;
+      line-height: 1.4;
+      font-weight: 400;
+      color: var(--blue-deep);
+      white-space: pre-wrap;
+    }
 
     .accept-signs {
       display: grid;
@@ -578,9 +586,9 @@
 
     .logo {
       display: block;
-      height: 112px;
+      height: 140px;
       width: auto;
-      max-width: 3.4in;
+      max-width: 3.8in;
       flex: 0 0 auto;
     }
 
@@ -588,24 +596,41 @@
       margin: 0;
       font-style: normal;
       color: var(--blue-deep);
-      font-size: 11px;
-      line-height: 1.45;
+      font-size: 14px;
+      line-height: 1.35;
       font-weight: 600;
+    }
+
+    .hq a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .hq a:hover {
+      text-decoration: underline;
+    }
+
+    .hq .web {
+      color: var(--red);
     }
 
     .cert-badges {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       background: #ffffff;
-      padding: 4px 6px;
+      padding: 2px 4px;
     }
 
     .cert-badges img {
       display: block;
-      height: 46px;
+      height: 38px;
       width: auto;
       background: #ffffff;
+    }
+
+    .cert-badges img.sba {
+      background: transparent;
     }
 
     .logo-sm {
@@ -621,33 +646,73 @@
 
     .cover-meta {
       text-align: right;
-      min-width: 2.7in;
-      padding-top: 22px;
+      min-width: 1.9in;
+      padding-top: 8px;
+    }
+
+    .cover > .block.fixed > .cover-meta {
+      padding-top: 0;
+      margin-bottom: 6px;
+    }
+
+    .badge-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 8px;
+    }
+
+    .badge-meta .cover-meta {
+      display: flex;
+      align-items: baseline;
+      justify-content: flex-end;
+      gap: 18px;
+      padding-top: 0;
+      margin-bottom: 0;
+      min-width: 0;
+    }
+
+    .badge-meta .meta-line {
+      margin-bottom: 0;
+    }
+
+    .sheet > .badge-meta {
+      flex-shrink: 0;
+      margin-top: 12px;
+      margin-bottom: 8px;
+    }
+
+    .proposal-mirror[data-empty="true"]:before {
+      content: attr(data-placeholder);
+      color: var(--hint);
+      font-style: italic;
+      font-weight: 400;
     }
 
     .meta-line {
       display: flex;
       justify-content: flex-end;
       align-items: baseline;
-      gap: 12px;
-      margin-bottom: 8px;
+      gap: 8px;
+      margin-bottom: 4px;
     }
 
     .meta-line .k {
-      font-size: 13px;
+      font-size: 11px;
       font-weight: 700;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--blue);
     }
 
     .meta-line .v {
-      min-width: 1.55in;
+      min-width: 1.15in;
       border-bottom: 1px solid #c5d0e4;
       text-align: left;
-      padding: 2px 4px 3px;
+      padding: 1px 2px 2px;
       font-weight: 700;
-      font-size: 18px;
+      font-size: 14px;
       color: var(--blue-deep);
     }
 
@@ -658,10 +723,10 @@
       background: transparent;
       font: inherit;
       font-weight: 700;
-      font-size: 18px;
+      font-size: 14px;
       color: var(--blue-deep);
-      width: 1.85in;
-      line-height: 1.2;
+      width: 1.35in;
+      line-height: 1.15;
       cursor: pointer;
     }
 
@@ -675,48 +740,11 @@
       opacity: 0.75;
     }
 
-    .cover-price {
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 4px;
-      margin-top: 12px;
-      margin-bottom: 0;
-    }
-
-    .cover-price .k {
-      background: transparent;
-      color: var(--blue);
-      border: 0;
-      font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
-      font-weight: 700;
-      font-size: 12px;
-      letter-spacing: 0.16em;
-      line-height: 1;
-      padding: 0 2px;
-    }
-
-    .cover-price .v {
-      display: inline-flex;
-      align-items: baseline;
-      justify-content: flex-end;
-      gap: 5px;
-      min-width: 1.55in;
-      background: #e6e8ec;
-      color: var(--blue);
-      border: 0;
-      border-bottom: 3px solid var(--red);
-      font-size: 22px;
-      font-weight: 700;
-      line-height: 1;
-      text-align: right;
-      padding: 8px 12px 7px;
-      white-space: nowrap;
-    }
-
-    .cover-price .mark {
-      font-size: 13px;
-      font-weight: 600;
-      opacity: 0.8;
+    .meta-line .v[contenteditable] {
+      display: inline-block;
+      outline: none;
+      cursor: text;
+      min-height: 1.15em;
     }
 
     .block { margin-top: 12px; }
@@ -750,31 +778,30 @@
 
     .field {
       display: grid;
-      grid-template-columns: 62px 1fr;
+      grid-template-columns: 84px 1fr;
       gap: 8px;
       align-items: baseline;
     }
 
     .field-label {
-      font-size: 8px;
+      font-size: 11px;
       font-weight: 700;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--blue);
     }
 
     .field input,
-    .field select,
-    .proposal-no span[contenteditable] {
+    .field select {
       width: 100%;
       border: 0;
       border-bottom: 1px solid #d5deee;
       border-radius: 0;
       background: transparent;
-      padding: 1px 0 2px;
+      padding: 2px 0 3px;
       color: var(--ink);
       font: inherit;
-      font-size: 12px;
+      font-size: 15px;
       font-weight: 600;
     }
 
@@ -797,7 +824,7 @@
       background-image:
         linear-gradient(45deg, transparent 50%, var(--blue) 50%),
         linear-gradient(135deg, var(--blue) 50%, transparent 50%);
-      background-position: calc(100% - 8px) 8px, calc(100% - 4px) 8px;
+      background-position: calc(100% - 8px) 10px, calc(100% - 4px) 10px;
       background-size: 4px 4px, 4px 4px;
       background-repeat: no-repeat;
       cursor: pointer;
@@ -824,23 +851,6 @@
       display: grid;
       grid-template-columns: 1fr 0.38fr;
       gap: 10px;
-    }
-
-    .proposal-no {
-      margin-top: 6px;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--blue-deep);
-    }
-
-    .proposal-no span[contenteditable] {
-      display: inline-block;
-      min-width: 1.4in;
-      width: auto;
-      letter-spacing: 0;
-      text-transform: none;
     }
 
     .scope-wrap {
@@ -1388,7 +1398,7 @@
       }
       .detail { page-break-inside: avoid; }
       .print-photos { display: none !important; }
-      .logo { height: 112px; width: auto; max-width: 3.4in; }
+      .logo { height: 140px; width: auto; max-width: 3.8in; }
       .logo-sm { height: 56px; width: auto; max-width: none; align-self: flex-start; object-fit: contain; }
       .thumb-open { width: 72px; height: 54px; }
       .thumb-open img {
@@ -1479,32 +1489,32 @@
             <div>Suite 1200</div>
             <div>West Palm Beach FL 33401</div>
             <div>(561) 684-9183</div>
-            <div>Fax: (561) 684-9536</div>
-            <div>allamericanasphaltpaving.com</div>
+            <div><a href="mailto:Allamericanasph@aol.com">Allamericanasph@aol.com</a></div>
+            <div class="web"><a href="https://allamericanasphaltpaving.com" target="_blank" rel="noopener">allamericanasphaltpaving.com</a></div>
           </address>
-        </div>
-        <div class="cert-badges">
-          <img src="logos/wbe.png" alt="Certified Women's Business Enterprise">
-          <img src="logos/bbb.png" alt="BBB Accredited Business">
-        </div>
-      </div>
-      <div class="cover-meta">
-        <div class="meta-line">
-          <span class="k">Date</span>
-          <input class="v" id="cover-date" type="date" name="cover-date" aria-label="Cover date">
-        </div>
-        <div class="meta-line">
-          <span class="k">Invoice</span>
-          <span class="v" id="invoice-no"></span>
-        </div>
-        <div class="meta-line cover-price">
-          <span class="k">Balance</span>
-          <span class="v"><span class="mark">$</span><span class="price-mirror"></span></span>
         </div>
       </div>
     </header>
 
     <section class="block fixed">
+      <div class="badge-meta">
+        <div class="cert-badges">
+          <img src="logos/wbe.png" alt="Certified Women's Business Enterprise">
+          <img class="sba" src="logos/sba.png" alt="U.S. Small Business Administration">
+          <img src="logos/bbb.png" alt="BBB Accredited Business">
+        </div>
+        <div class="cover-meta">
+          <div class="meta-line">
+            <span class="k">Date</span>
+            <input class="v" id="cover-date" type="date" name="cover-date" aria-label="Cover date">
+          </div>
+          <div class="meta-line">
+            <span class="k">Proposal</span>
+            <span class="v" id="proposal-no" contenteditable="true" data-placeholder="0000-00000" data-empty="true" role="textbox" aria-label="Proposal number"></span>
+          </div>
+          <span id="invoice-no" hidden></span>
+        </div>
+      </div>
       <div class="info-row">
         <div class="bar">Project Information</div>
         <div class="info-fields">
@@ -1597,15 +1607,22 @@
             <span class="field-label">Email</span>
             <input id="client-email" type="email" name="client-email" autocomplete="email" placeholder="client@email.com">
           </label>
-          <div class="proposal-no">Proposal Number <span id="proposal-no" contenteditable="true" data-placeholder="0000-00000" data-empty="true"></span></div>
         </div>
       </div>
     </section>
 
     <section class="block grow">
-      <div class="bar">Scope of Work</div>
       <div class="scope-wrap">
-        <div id="scope-text" class="writing" contenteditable="true" data-placeholder="Type the scope of work" data-empty="true"></div>
+        <div class="scope-editor">
+          <div class="scope-title-row">
+            <h2>Scope of Work:</h2>
+            <span class="included-col">Included</span>
+          </div>
+          <div id="coordination" class="coord" contenteditable="true">Project Coordination</div>
+          <ul class="checks" id="checks"></ul>
+          <button type="button" class="text-btn noprint" id="add-line">Add line</button>
+          <button type="button" class="text-btn noprint" id="add-detail">Add detail section</button>
+        </div>
         <div class="price">$<input id="price-scope" type="text" inputmode="decimal" placeholder="0.00" aria-label="Price" autocomplete="off"></div>
       </div>
     </section>
@@ -1639,36 +1656,6 @@
       <button type="button" class="lightbox-nav lightbox-next" id="lightbox-next" aria-label="Next photo">›</button>
     </div>
 
-    <footer class="band">
-      <div class="band-rule" aria-hidden="true"></div>
-      <div class="band-main">
-        <div class="office">
-          <div class="band-kicker">Office</div>
-          <strong>All American Asphalt, LLC</strong>
-          <span id="office-street" contenteditable="true" data-placeholder="Street address" data-empty="true"></span>
-          <span id="office-city" contenteditable="true" data-placeholder="City, State ZIP" data-empty="true"></span>
-        </div>
-        <div class="slogan">
-          <div class="giving">“From Start to Finish”</div>
-          <div class="site">allamericanasphaltpaving.com</div>
-        </div>
-        <div class="advisor">
-          <div class="band-kicker">Estimator</div>
-          <div class="contact-line">
-            <span class="tag">Name</span>
-            <span id="estimator-name" contenteditable="true" data-placeholder="Full name" data-empty="true"></span>
-          </div>
-          <div class="contact-line">
-            <span class="tag">Phone</span>
-            <span id="estimator-phone" contenteditable="true" data-placeholder="(000) 000-0000" data-empty="true"></span>
-          </div>
-          <div class="contact-line">
-            <span class="tag">Email</span>
-            <span id="estimator-email" contenteditable="true" data-placeholder="name@email.com" data-empty="true"></span>
-          </div>
-        </div>
-      </div>
-      </footer>
     <p class="page-number">Page 1</p>
   </article>
 
@@ -1682,37 +1669,34 @@
             <div>Suite 1200</div>
             <div>West Palm Beach FL 33401</div>
             <div>(561) 684-9183</div>
-            <div>Fax: (561) 684-9536</div>
-            <div>allamericanasphaltpaving.com</div>
+            <div><a href="mailto:Allamericanasph@aol.com">Allamericanasph@aol.com</a></div>
+            <div class="web"><a href="https://allamericanasphaltpaving.com" target="_blank" rel="noopener">allamericanasphaltpaving.com</a></div>
           </address>
         </div>
-        <div class="cert-badges">
-          <img src="logos/wbe.png" alt="Certified Women's Business Enterprise">
-          <img src="logos/bbb.png" alt="BBB Accredited Business">
-        </div>
+      </div>
+    </header>
+    <div class="badge-meta">
+      <div class="cert-badges">
+        <img src="logos/wbe.png" alt="Certified Women's Business Enterprise">
+        <img class="sba" src="logos/sba.png" alt="U.S. Small Business Administration">
+        <img src="logos/bbb.png" alt="BBB Accredited Business">
       </div>
       <div class="cover-meta">
         <div class="meta-line">
           <span class="k">Date</span>
-          <input class="v page-date" id="page-date" type="date" aria-label="Invoice date">
+          <input class="v page-date" id="page-date" type="date" aria-label="Date">
         </div>
         <div class="meta-line">
-          <span class="k">Invoice</span>
-          <span class="v invoice-mirror" id="invoice-no-page"></span>
+          <span class="k">Proposal</span>
+          <span class="v proposal-mirror" data-placeholder="0000-00000" data-empty="true"></span>
         </div>
       </div>
-    </header>
-    <div class="scope-title-row">
-      <h2>Scope of Work:</h2>
-      <span class="included-col">Included</span>
     </div>
-    <div id="coordination" class="coord" contenteditable="true">Project Coordination</div>
     <div class="sheet-body">
-    <ul class="checks" id="checks"></ul>
-    <button type="button" class="text-btn noprint" id="add-line">Add line</button>
-
-    <div id="details"></div>
-    <button type="button" class="text-btn noprint" id="add-detail">Add detail section</button>
+      <div class="scope-title-row">
+        <h2>Scope of Work</h2>
+      </div>
+      <div id="details"></div>
     </div>
     <p class="page-number">Page 2</p>
   </article>
@@ -1727,26 +1711,29 @@
             <div>Suite 1200</div>
             <div>West Palm Beach FL 33401</div>
             <div>(561) 684-9183</div>
-            <div>Fax: (561) 684-9536</div>
-            <div>allamericanasphaltpaving.com</div>
+            <div><a href="mailto:Allamericanasph@aol.com">Allamericanasph@aol.com</a></div>
+            <div class="web"><a href="https://allamericanasphaltpaving.com" target="_blank" rel="noopener">allamericanasphaltpaving.com</a></div>
           </address>
         </div>
-        <div class="cert-badges">
-          <img src="logos/wbe.png" alt="Certified Women's Business Enterprise">
-          <img src="logos/bbb.png" alt="BBB Accredited Business">
-        </div>
+      </div>
+    </header>
+    <div class="badge-meta">
+      <div class="cert-badges">
+        <img src="logos/wbe.png" alt="Certified Women's Business Enterprise">
+        <img class="sba" src="logos/sba.png" alt="U.S. Small Business Administration">
+        <img src="logos/bbb.png" alt="BBB Accredited Business">
       </div>
       <div class="cover-meta">
         <div class="meta-line">
           <span class="k">Date</span>
-          <input class="v page-date" id="page-date-3" type="date" aria-label="Invoice date">
+          <input class="v page-date" id="page-date-3" type="date" aria-label="Date">
         </div>
         <div class="meta-line">
-          <span class="k">Invoice</span>
-          <span class="v invoice-mirror" id="invoice-no-page-3"></span>
+          <span class="k">Proposal</span>
+          <span class="v proposal-mirror" data-placeholder="0000-00000" data-empty="true"></span>
         </div>
       </div>
-    </header>
+    </div>
     <div class="disclaimer">
       <p><strong>Disclaimer:</strong> All pricing presented in this proposal is based on the November 2024 FDOT Asphalt Index and reflects material and labor costs as of that time. However, due to the significant cost fluctuations in 2025, we are unable to fully honor the 2024 rates in their entirety. While we strive to maintain transparency and consistency, market volatility has affected base materials, asphalt supply, transportation, and labor costs industry-wide.</p>
       <p>That said, West Palm Beach Asphalt Paving is committed to working collaboratively with you to ensure you receive the highest quality materials, craftsmanship, and service at the most competitive and fair pricing available. Our goal is to deliver exceptional value without compromising project standards or timeline expectations.</p>
@@ -1775,26 +1762,29 @@
             <div>Suite 1200</div>
             <div>West Palm Beach FL 33401</div>
             <div>(561) 684-9183</div>
-            <div>Fax: (561) 684-9536</div>
-            <div>allamericanasphaltpaving.com</div>
+            <div><a href="mailto:Allamericanasph@aol.com">Allamericanasph@aol.com</a></div>
+            <div class="web"><a href="https://allamericanasphaltpaving.com" target="_blank" rel="noopener">allamericanasphaltpaving.com</a></div>
           </address>
         </div>
-        <div class="cert-badges">
-          <img src="logos/wbe.png" alt="Certified Women's Business Enterprise">
-          <img src="logos/bbb.png" alt="BBB Accredited Business">
-        </div>
+      </div>
+    </header>
+    <div class="badge-meta">
+      <div class="cert-badges">
+        <img src="logos/wbe.png" alt="Certified Women's Business Enterprise">
+        <img class="sba" src="logos/sba.png" alt="U.S. Small Business Administration">
+        <img src="logos/bbb.png" alt="BBB Accredited Business">
       </div>
       <div class="cover-meta">
         <div class="meta-line">
           <span class="k">Date</span>
-          <input class="v page-date" id="page-date-4" type="date" aria-label="Invoice date">
+          <input class="v page-date" id="page-date-4" type="date" aria-label="Date">
         </div>
         <div class="meta-line">
-          <span class="k">Invoice</span>
-          <span class="v invoice-mirror" id="invoice-no-page-4"></span>
+          <span class="k">Proposal</span>
+          <span class="v proposal-mirror" data-placeholder="0000-00000" data-empty="true"></span>
         </div>
       </div>
-    </header>
+    </div>
     <h2 class="terms-title">Terms and Conditions</h2>
     <ol class="terms">
       <li>Our proposals are limited to the items specified; anything not explicitly included is excluded from the contract. Any changes to the proposal specifications will be at the customer's request and discussed beforehand.</li>
@@ -1830,26 +1820,29 @@
             <div>Suite 1200</div>
             <div>West Palm Beach FL 33401</div>
             <div>(561) 684-9183</div>
-            <div>Fax: (561) 684-9536</div>
-            <div>allamericanasphaltpaving.com</div>
+            <div><a href="mailto:Allamericanasph@aol.com">Allamericanasph@aol.com</a></div>
+            <div class="web"><a href="https://allamericanasphaltpaving.com" target="_blank" rel="noopener">allamericanasphaltpaving.com</a></div>
           </address>
         </div>
-        <div class="cert-badges">
-          <img src="logos/wbe.png" alt="Certified Women's Business Enterprise">
-          <img src="logos/bbb.png" alt="BBB Accredited Business">
-        </div>
+      </div>
+    </header>
+    <div class="badge-meta">
+      <div class="cert-badges">
+        <img src="logos/wbe.png" alt="Certified Women's Business Enterprise">
+        <img class="sba" src="logos/sba.png" alt="U.S. Small Business Administration">
+        <img src="logos/bbb.png" alt="BBB Accredited Business">
       </div>
       <div class="cover-meta">
         <div class="meta-line">
           <span class="k">Date</span>
-          <input class="v page-date" id="page-date-5" type="date" aria-label="Invoice date">
+          <input class="v page-date" id="page-date-5" type="date" aria-label="Date">
         </div>
         <div class="meta-line">
-          <span class="k">Invoice</span>
-          <span class="v invoice-mirror" id="invoice-no-page-5"></span>
+          <span class="k">Proposal</span>
+          <span class="v proposal-mirror" data-placeholder="0000-00000" data-empty="true"></span>
         </div>
       </div>
-    </header>
+    </div>
     <ol class="terms" start="20">
       <li>RAIN: if its raining the day of the scheduled service, assume we aren't coming and we will contact you to reschedule as soon as possible. If it rains after our installation, please contact your representative. We monitor the weather closely and can generally predict accurately.</li>
       <li>Sprinklers should be off 24 hours prior until 48 hours after service. Avoid lawn cutting during this same period of time. The surface must be dry for our arrival.</li>
@@ -1892,26 +1885,29 @@
             <div>Suite 1200</div>
             <div>West Palm Beach FL 33401</div>
             <div>(561) 684-9183</div>
-            <div>Fax: (561) 684-9536</div>
-            <div>allamericanasphaltpaving.com</div>
+            <div><a href="mailto:Allamericanasph@aol.com">Allamericanasph@aol.com</a></div>
+            <div class="web"><a href="https://allamericanasphaltpaving.com" target="_blank" rel="noopener">allamericanasphaltpaving.com</a></div>
           </address>
         </div>
-        <div class="cert-badges">
-          <img src="logos/wbe.png" alt="Certified Women's Business Enterprise">
-          <img src="logos/bbb.png" alt="BBB Accredited Business">
-        </div>
+      </div>
+    </header>
+    <div class="badge-meta">
+      <div class="cert-badges">
+        <img src="logos/wbe.png" alt="Certified Women's Business Enterprise">
+        <img class="sba" src="logos/sba.png" alt="U.S. Small Business Administration">
+        <img src="logos/bbb.png" alt="BBB Accredited Business">
       </div>
       <div class="cover-meta">
         <div class="meta-line">
           <span class="k">Date</span>
-          <input class="v page-date" id="page-date-6" type="date" aria-label="Invoice date">
+          <input class="v page-date" id="page-date-6" type="date" aria-label="Date">
         </div>
         <div class="meta-line">
-          <span class="k">Invoice</span>
-          <span class="v invoice-mirror" id="invoice-no-page-6"></span>
+          <span class="k">Proposal</span>
+          <span class="v proposal-mirror" data-placeholder="0000-00000" data-empty="true"></span>
         </div>
       </div>
-    </header>
+    </div>
     <div class="accept-block">
       <div class="accept-label">Proposal Total</div>
       <div class="accept-copy">
@@ -1931,7 +1927,7 @@
     </div>
     <div class="accept-block">
       <div class="accept-label">Payment Terms</div>
-      <p class="accept-copy accept-terms">30% Deposit | 30% Upon Commencement | 30% Substantial Completion | 10% Completion</p>
+      <div id="payment-terms" class="payment-field" contenteditable="true" data-placeholder="Type payment terms here" data-empty="true" role="textbox" aria-label="Payment terms"></div>
     </div>
     <div class="accept-signs">
       <div>
@@ -2064,36 +2060,6 @@
         </div>
       </div>
     </div>
-    <footer class="band">
-      <div class="band-rule" aria-hidden="true"></div>
-      <div class="band-main">
-        <div class="office">
-          <div class="band-kicker">Office</div>
-          <strong>All American Asphalt, LLC</strong>
-          <span class="footer-mirror" data-source="office-street" data-placeholder="Street address" data-empty="true"></span>
-          <span class="footer-mirror" data-source="office-city" data-placeholder="City, State ZIP" data-empty="true"></span>
-        </div>
-        <div class="slogan">
-          <div class="giving">“From Start to Finish”</div>
-          <div class="site">allamericanasphaltpaving.com</div>
-        </div>
-        <div class="advisor">
-          <div class="band-kicker">Estimator</div>
-          <div class="contact-line">
-            <span class="tag">Name</span>
-            <span class="footer-mirror" data-source="estimator-name" data-placeholder="Full name" data-empty="true"></span>
-          </div>
-          <div class="contact-line">
-            <span class="tag">Phone</span>
-            <span class="footer-mirror" data-source="estimator-phone" data-placeholder="(000) 000-0000" data-empty="true"></span>
-          </div>
-          <div class="contact-line">
-            <span class="tag">Email</span>
-            <span class="footer-mirror" data-source="estimator-email" data-placeholder="name@email.com" data-empty="true"></span>
-          </div>
-        </div>
-      </div>
-    </footer>
     <p class="page-number">Page 6</p>
   </article>
   <div class="page-nav noprint">
@@ -2106,13 +2072,11 @@
   <script>
     const scopeItems = [
       "Mobilization & Setup",
-      "Surface Cleaning & Parking Lot Preparation – Three Lots",
       "Sinkhole Excavation & Sub-Base Inspection",
       "Bump Milling",
       "Car Stop Removal & Replacement",
       "Tack Coat Application",
       "Asphalt Installation",
-      "Bush Installation/Root Removal",
       "Pavement Striping – All Parking Lots",
       "Cleanup & Disposal"
     ];
@@ -2121,9 +2085,6 @@
       "Mobilization & Setup": [
         "Includes transportation of all necessary equipment, crew mobilization, and setup of safety barriers, lighting, and signage.",
         "Coordination with customer for access and staging."
-      ],
-      "Surface Cleaning & Parking Lot Preparation – Three Lots": [
-        "Clean and prepare all three parking lots for paving operations. Remove loose debris."
       ]
     };
 
@@ -2179,18 +2140,21 @@
     }
 
     const estimatorPhone = document.getElementById("estimator-phone");
-    estimatorPhone.addEventListener("input", () => {
-      const digitsBefore = caretDigitCount(estimatorPhone);
-      const formatted = formatPhone(estimatorPhone.textContent);
-      if (estimatorPhone.textContent !== formatted) {
-        estimatorPhone.textContent = formatted;
-        if (digitsBefore != null) setCaretAfterDigits(estimatorPhone, digitsBefore);
-      }
-      markEmpty(estimatorPhone);
-    });
+    if (estimatorPhone) {
+      estimatorPhone.addEventListener("input", () => {
+        const digitsBefore = caretDigitCount(estimatorPhone);
+        const formatted = formatPhone(estimatorPhone.textContent);
+        if (estimatorPhone.textContent !== formatted) {
+          estimatorPhone.textContent = formatted;
+          if (digitsBefore != null) setCaretAfterDigits(estimatorPhone, digitsBefore);
+        }
+        markEmpty(estimatorPhone);
+      });
+    }
 
     ["office-street", "office-city", "estimator-name", "estimator-phone", "estimator-email"].forEach((id) => {
-      document.getElementById(id).addEventListener("input", syncPageHeader);
+      const source = document.getElementById(id);
+      if (source) source.addEventListener("input", syncPageHeader);
     });
 
     const coverDate = document.getElementById("cover-date");
@@ -2371,6 +2335,12 @@
       document.querySelectorAll(".invoice-mirror").forEach((el) => {
         el.textContent = invoiceNo.textContent;
       });
+      const proposal = document.getElementById("proposal-no");
+      const proposalText = proposal ? proposal.textContent.trim() : "";
+      document.querySelectorAll(".proposal-mirror").forEach((el) => {
+        el.textContent = proposalText;
+        el.dataset.empty = proposalText ? "false" : "true";
+      });
       const price = priceScope.value.trim();
       document.querySelectorAll(".price-mirror").forEach((el) => {
         el.textContent = price || "0.00";
@@ -2392,6 +2362,7 @@
 
     coverDate.addEventListener("input", syncPageHeader);
     coverDate.addEventListener("change", syncPageHeader);
+    document.getElementById("proposal-no").addEventListener("input", syncPageHeader);
     document.querySelector('input[name="customer"]').addEventListener("input", syncPageHeader);
     document.querySelectorAll("input.page-date").forEach((input) => {
       input.addEventListener("input", () => {
@@ -2583,13 +2554,17 @@
         else if (input.type !== "file") input.value = "";
       });
       root.querySelectorAll("select").forEach((select) => { select.selectedIndex = 0; });
-      ["scope-text", "options-text", "proposal-no", "office-street", "office-city", "estimator-name", "estimator-phone", "estimator-email", "invoice-no"].forEach((id) => {
+      ["scope-text", "options-text", "payment-terms", "proposal-no", "office-street", "office-city", "estimator-name", "estimator-phone", "estimator-email", "invoice-no"].forEach((id) => {
         const el = root.querySelector("#" + id);
         if (!el) return;
         el.textContent = "";
         if (el.hasAttribute("data-empty")) el.dataset.empty = "true";
       });
       root.querySelectorAll(".invoice-mirror").forEach((el) => { el.textContent = ""; });
+      root.querySelectorAll(".proposal-mirror").forEach((el) => {
+        el.textContent = "";
+        el.dataset.empty = "true";
+      });
       root.querySelectorAll(".price-mirror").forEach((el) => { el.textContent = ""; });
       root.querySelectorAll(".customer-mirror").forEach((el) => { el.textContent = ""; });
       root.querySelectorAll(".footer-mirror").forEach((el) => {
@@ -2681,7 +2656,7 @@
       const named = ["customer", "street", "suite", "city", "state", "zip", "phone", "client-email", "bill-customer", "bill-street", "bill-suite", "bill-city", "bill-state", "bill-zip", "bill-phone", "bill-email"];
       if (named.some((name) => fieldValue(name).trim())) return false;
       if (coverDate.value || priceScope.value.trim()) return false;
-      const written = ["proposal-no", "scope-text", "options-text", "office-street", "office-city", "estimator-name", "estimator-phone", "estimator-email"];
+      const written = ["proposal-no", "scope-text", "options-text", "payment-terms", "office-street", "office-city", "estimator-name", "estimator-phone", "estimator-email"];
       if (written.some((id) => readText(id))) return false;
       if (photos.some((photo) => photo.blob)) return false;
       return true;
@@ -2795,6 +2770,7 @@
       setText(document.getElementById("proposal-no"), "");
       setText(document.getElementById("scope-text"), "");
       setText(document.getElementById("options-text"), "");
+      setText(document.getElementById("payment-terms"), "");
       setText(document.getElementById("office-street"), "");
       setText(document.getElementById("office-city"), "");
       setText(document.getElementById("estimator-name"), "");
@@ -2824,6 +2800,7 @@
         proposal: readText("proposal-no"),
         scope: readText("scope-text"),
         options: readText("options-text"),
+        paymentTerms: readText("payment-terms"),
         officeStreet: readText("office-street"),
         officeCity: readText("office-city"),
         estimatorName: readText("estimator-name"),
@@ -2871,6 +2848,7 @@
       setText(document.getElementById("proposal-no"), record.proposal);
       setText(document.getElementById("scope-text"), record.scope);
       setText(document.getElementById("options-text"), record.options);
+      setText(document.getElementById("payment-terms"), record.paymentTerms);
       setText(document.getElementById("office-street"), record.officeStreet);
       setText(document.getElementById("office-city"), record.officeCity);
       setText(document.getElementById("estimator-name"), record.estimatorName);
@@ -2937,6 +2915,9 @@
         "",
         "Options:",
         readText("options-text"),
+        "",
+        "Payment terms:",
+        readText("payment-terms"),
         "",
         "All American Asphalt, LLC",
         "1645 Palm Beach Lakes Blvd Suite 1200",
