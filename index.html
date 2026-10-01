@@ -1621,7 +1621,6 @@
           <div id="coordination" class="coord" contenteditable="true">Project Coordination</div>
           <ul class="checks" id="checks"></ul>
           <button type="button" class="text-btn noprint" id="add-line">Add line</button>
-          <button type="button" class="text-btn noprint" id="add-detail">Add detail section</button>
         </div>
         <div class="price">$<input id="price-scope" type="text" inputmode="decimal" placeholder="0.00" aria-label="Price" autocomplete="off"></div>
       </div>
@@ -1697,6 +1696,7 @@
         <h2>Scope of Work</h2>
       </div>
       <div id="details"></div>
+      <button type="button" class="text-btn noprint" id="add-detail" hidden>Add detail section</button>
     </div>
     <p class="page-number">Page 2</p>
   </article>
@@ -2422,9 +2422,12 @@
       remove.setAttribute("aria-label", "Remove line");
       remove.textContent = "×";
       const section = addDetail(opts.title != null ? opts.title : label, opts.bullets);
+      if (opts.added) li.dataset.added = "true";
       remove.addEventListener("click", () => {
+        if (lastAddedLine === li) lastAddedLine = null;
         li.remove();
         section.remove();
+        syncDetailButton();
       });
       li.append(box, text, remove);
       document.getElementById("checks").append(li);
@@ -2436,9 +2439,11 @@
       });
       text.addEventListener("input", () => {
         const heading = section.querySelector("h3");
-        if (heading) heading.textContent = text.textContent;
+        if (!heading) return;
+        heading.textContent = text.textContent;
+        markEmpty(heading);
       });
-      return text;
+      return li;
     }
 
     function addBullet(list, text) {
@@ -2487,10 +2492,33 @@
       return section;
     }
 
+    let lastAddedLine = null;
+
     scopeItems.forEach((item) => addCheck(item, { bullets: starterBullets[item] }));
 
-    document.getElementById("add-line").addEventListener("click", () => addCheck(""));
-    document.getElementById("add-detail").addEventListener("click", () => addCheck("", { checked: true }));
+    function syncDetailButton() {
+      const button = document.getElementById("add-detail");
+      if (!button) return;
+      button.hidden = !document.querySelector("#checks li[data-added]");
+    }
+
+    document.getElementById("add-line").addEventListener("click", () => {
+      lastAddedLine = addCheck("", { added: true });
+      syncDetailButton();
+      const text = lastAddedLine.querySelector("[contenteditable]");
+      if (text) text.focus();
+    });
+
+    document.getElementById("add-detail").addEventListener("click", () => {
+      const added = [...document.querySelectorAll("#checks li[data-added]")];
+      const line = lastAddedLine && lastAddedLine.isConnected ? lastAddedLine : added[added.length - 1];
+      if (!line) return;
+      lastAddedLine = line;
+      const box = line.querySelector('input[type="checkbox"]');
+      if (!box) return;
+      box.checked = true;
+      box.dispatchEvent(new Event("change"));
+    });
     const outputToggle = document.getElementById("output-toggle");
     const outputPanel = document.getElementById("output-panel");
 
@@ -2757,9 +2785,11 @@
     }
 
     function resetScopeTemplate() {
+      lastAddedLine = null;
       document.getElementById("checks").replaceChildren();
       document.getElementById("details").replaceChildren();
       scopeItems.forEach((item) => addCheck(item, { bullets: starterBullets[item] }));
+      syncDetailButton();
       setText(document.getElementById("coordination"), "Project Coordination");
     }
 
@@ -2818,7 +2848,8 @@
         coordination: readText("coordination"),
         checks: [...document.querySelectorAll("#checks li")].map((li) => ({
           label: li.querySelector("[contenteditable]").textContent,
-          checked: li.querySelector("input").checked
+          checked: li.querySelector("input").checked,
+          added: li.dataset.added === "true"
         })),
         details: [...document.querySelectorAll("#details .detail")].map((section) => ({
           title: section.querySelector("h3").textContent,
@@ -2875,9 +2906,12 @@
         addCheck(check.label != null ? check.label : (detail.title || ""), {
           checked: !!check.checked,
           title: detail.title,
-          bullets: detail.bullets
+          bullets: detail.bullets,
+          added: check.added != null ? !!check.added : i >= scopeItems.length
         });
       }
+      lastAddedLine = document.querySelector("#checks li[data-added]:last-child");
+      syncDetailButton();
       clearPhotos();
       (record.photos || []).forEach((photo) => {
         if (!photo.blob) return;
