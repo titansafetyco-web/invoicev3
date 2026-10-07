@@ -123,7 +123,7 @@
       padding: 0.42in 0.48in 0.22in;
       display: flex;
       flex-direction: column;
-      height: 11.85in;
+      height: 11in;
     }
 
     .continuation,
@@ -194,8 +194,61 @@
 
     .cover #options-text {
       flex: 0 0 auto;
-      min-height: 1.55in;
+      min-height: 1.8in;
+      font-size: 16.5px;
     }
+
+    .cover .field-label { font-size: 12px; }
+
+    .cover .field input,
+    .cover .field select {
+      font-size: 16.5px;
+      padding: 4px 0 5px;
+    }
+
+    .cover .info-fields { gap: 6px; }
+
+    .cover .scope-title-row h2 { font-size: 21px; }
+    .cover .coord { font-size: 13px; }
+
+    .cover .checks-scroll {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+
+    .cover .checks {
+      display: grid;
+      grid-template-rows: repeat(8, minmax(22px, auto));
+      grid-auto-flow: column;
+      grid-auto-columns: 340px;
+      column-gap: 20px;
+      flex: 0 0 auto;
+      width: max-content;
+      min-width: 340px;
+      font-size: 13px;
+      line-height: 1.35;
+      border-left: 0;
+      padding: 2px 0;
+    }
+
+    .cover .checks li {
+      margin: 0;
+      min-height: 22px;
+      padding: 1px 8px 1px 10px;
+      border-left: 2px dotted var(--blue);
+    }
+
+    .cover .checks input {
+      width: 12px;
+      height: 12px;
+      margin-top: 2px;
+    }
+
+    .cover .price,
+    .cover .price input { font-size: 22px; }
 
     .cover .band { margin-top: 10px; }
     .cover .page-number { margin-top: auto; }
@@ -216,7 +269,20 @@
 
     .continuation > header { margin-bottom: 10px; }
 
+    .notes-page .options-block { margin-top: 28px; }
+
+    .notes-page #options-text {
+      min-height: 0.95in;
+      max-height: 1.15in;
+      margin-top: 8px;
+      overflow: auto;
+      font-size: 15px;
+      border: 1px solid #c5d0e4;
+      padding: 6px 8px;
+    }
+
     .notes-page > header,
+    .notes-page > .block,
     .notes-page > .page-number {
       flex-shrink: 0;
     }
@@ -226,7 +292,7 @@
     .notes-page > header { margin-bottom: 10px; }
 
     .disclaimer {
-      margin-top: 96px;
+      margin-top: 48px;
       font-size: 14px;
       line-height: 1.55;
       color: var(--ink);
@@ -241,7 +307,7 @@
       margin-top: 22px;
     }
 
-    .disclaimer .sign-row { margin-top: 240px; }
+    .disclaimer .sign-row { margin-top: 28px; }
 
     .warranty-extra .sign-row { margin-top: 24px; }
 
@@ -1404,6 +1470,7 @@
         box-shadow: none;
         overflow: hidden;
       }
+      .sheet.cover { height: 11in; }
       .cover { display: flex !important; page-break-after: always; }
       .continuation,
       .notes-page,
@@ -1749,16 +1816,14 @@
             <span class="included-col">Included</span>
           </div>
           <div id="coordination" class="coord" contenteditable="true">Project Coordination</div>
-          <ul class="checks" id="checks"></ul>
+          <div class="checks-scroll">
+            <ul class="checks" id="checks"></ul>
+            <ul class="checks" id="checks-2"></ul>
+          </div>
           <button type="button" class="text-btn noprint" id="add-line">Add line</button>
         </div>
         <div class="price">$<input id="price-scope" type="text" inputmode="decimal" placeholder="0.00" aria-label="Price" autocomplete="off"></div>
       </div>
-    </section>
-
-    <section class="block grow">
-      <div class="bar">Options:</div>
-      <div id="options-text" class="writing" contenteditable="true" data-placeholder="Type options here" data-empty="true"></div>
     </section>
 
     <p class="page-number">Page 1</p>
@@ -1863,6 +1928,10 @@
         </div>
       </div>
     </div>
+    <section class="block fixed options-block">
+      <div class="bar">Options:</div>
+      <div id="options-text" class="writing" contenteditable="true" data-placeholder="Type options here" data-empty="true"></div>
+    </section>
     <div class="disclaimer">
       <p><strong>Disclaimer:</strong> All pricing presented in this proposal is based on the November 2024 FDOT Asphalt Index and reflects material and labor costs as of that time. However, due to the significant cost fluctuations in 2025, we are unable to fully honor the 2024 rates in their entirety. While we strive to maintain transparency and consistency, market volatility has affected base materials, asphalt supply, transportation, and labor costs industry-wide.</p>
       <p>That said, All American Asphalt Paving LLC is committed to working collaboratively with you to ensure you receive the highest quality materials, craftsmanship, and service at the most competitive and fair pricing available. Our goal is to deliver exceptional value without compromising project standards or timeline expectations.</p>
@@ -2555,24 +2624,34 @@
       remove.className = "row-x noprint";
       remove.setAttribute("aria-label", "Remove line");
       remove.textContent = "×";
-      const section = addDetail(opts.title != null ? opts.title : label, opts.bullets);
+      let section = opts.slot ? null : addDetail(opts.title != null ? opts.title : label, opts.bullets);
       if (opts.added) li.dataset.added = "true";
+      if (opts.slot) li.dataset.slot = "true";
+      function ensureDetail() {
+        if (section) return section;
+        section = addDetail(opts.title != null ? opts.title : text.textContent, opts.bullets);
+        section.hidden = !box.checked;
+        return section;
+      }
       remove.addEventListener("click", () => {
         if (lastAddedLine === li) lastAddedLine = null;
         li.remove();
-        section.remove();
+        if (section) section.remove();
         syncDetailButton();
+        if ((opts.list || "checks") === "checks-2") fillExtraList();
       });
       li.append(box, text, remove);
-      document.getElementById("checks").append(li);
+      document.getElementById(opts.list || "checks").append(li);
       watch(text);
       box.checked = !!opts.checked;
-      section.hidden = !box.checked;
+      if (section) section.hidden = !box.checked;
       box.addEventListener("change", () => {
-        section.hidden = !box.checked;
+        if (box.checked || text.textContent.trim()) delete li.dataset.slot;
+        ensureDetail().hidden = !box.checked;
       });
       text.addEventListener("input", () => {
-        const heading = section.querySelector("h3");
+        if (text.textContent.trim()) delete li.dataset.slot;
+        const heading = ensureDetail().querySelector("h3");
         if (!heading) return;
         heading.textContent = text.textContent;
         markEmpty(heading);
@@ -2628,23 +2707,38 @@
 
     let lastAddedLine = null;
 
+    function fillExtraList() {
+      const list = document.getElementById("checks-2");
+      if (!list) return;
+      const rows = list.querySelectorAll(":scope > li").length;
+      for (let i = rows; i < 8; i++) addCheck("", { list: "checks-2", slot: true });
+    }
+
     scopeItems.forEach((item) => addCheck(item, { bullets: starterBullets[item] }));
+    fillExtraList();
 
     function syncDetailButton() {
       const button = document.getElementById("add-detail");
       if (!button) return;
-      button.hidden = !document.querySelector("#checks li[data-added]");
+      button.hidden = !document.querySelector("#checks li[data-added], #checks-2 li[data-added]");
     }
 
     document.getElementById("add-line").addEventListener("click", () => {
-      lastAddedLine = addCheck("", { added: true });
+      const slot = document.querySelector("#checks-2 li[data-slot='true']");
+      if (slot) {
+        delete slot.dataset.slot;
+        slot.dataset.added = "true";
+        lastAddedLine = slot;
+      } else {
+        lastAddedLine = addCheck("", { added: true, list: "checks-2" });
+      }
       syncDetailButton();
       const text = lastAddedLine.querySelector("[contenteditable]");
       if (text) text.focus();
     });
 
     document.getElementById("add-detail").addEventListener("click", () => {
-      const added = [...document.querySelectorAll("#checks li[data-added]")];
+      const added = [...document.querySelectorAll("#checks li[data-added], #checks-2 li[data-added]")];
       const line = lastAddedLine && lastAddedLine.isConnected ? lastAddedLine : added[added.length - 1];
       if (!line) return;
       lastAddedLine = line;
@@ -2921,8 +3015,10 @@
     function resetScopeTemplate() {
       lastAddedLine = null;
       document.getElementById("checks").replaceChildren();
+      document.getElementById("checks-2").replaceChildren();
       document.getElementById("details").replaceChildren();
       scopeItems.forEach((item) => addCheck(item, { bullets: starterBullets[item] }));
+      fillExtraList();
       syncDetailButton();
       setText(document.getElementById("coordination"), "Project Coordination");
     }
@@ -2989,7 +3085,11 @@
         billPhone: fieldValue("bill-phone"),
         billEmail: fieldValue("bill-email"),
         coordination: readText("coordination"),
-        checks: [...document.querySelectorAll("#checks li")].map((li) => ({
+        checks: [...document.querySelectorAll("#checks li, #checks-2 li")].filter((li) => {
+          const label = li.querySelector("[contenteditable]").textContent.trim();
+          const checked = li.querySelector("input").checked;
+          return li.dataset.slot !== "true" || label || checked;
+        }).map((li) => ({
           label: li.querySelector("[contenteditable]").textContent,
           checked: li.querySelector("input").checked,
           added: li.dataset.added === "true"
@@ -3048,6 +3148,7 @@
       setField("bill-email", record.billEmail);
       setText(document.getElementById("coordination"), record.coordination || "Project Coordination");
       document.getElementById("checks").replaceChildren();
+      document.getElementById("checks-2").replaceChildren();
       document.getElementById("details").replaceChildren();
       const savedChecks = record.checks || [];
       const savedDetails = record.details || [];
@@ -3059,10 +3160,12 @@
           checked: !!check.checked,
           title: detail.title,
           bullets: detail.bullets,
-          added: check.added != null ? !!check.added : i >= scopeItems.length
+          added: check.added != null ? !!check.added : i >= scopeItems.length,
+          list: i < 8 ? "checks" : "checks-2"
         });
       }
-      lastAddedLine = document.querySelector("#checks li[data-added]:last-child");
+      fillExtraList();
+      lastAddedLine = document.querySelector("#checks-2 li[data-added]:last-child, #checks li[data-added]:last-child");
       syncDetailButton();
       clearPhotos();
       (record.photos || []).forEach((photo) => {
