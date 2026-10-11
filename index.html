@@ -209,7 +209,7 @@
     .cover .info-fields { gap: 6px; }
 
     .cover .scope-title-row h2 { font-size: 21px; }
-    .cover .coord { font-size: 13px; }
+    .cover .coord { font-size: 13px; margin-top: 28px; }
 
     .cover .checks-scroll {
       display: flex;
@@ -257,7 +257,7 @@
       flex: 1 1 auto;
       min-height: 0;
       margin-top: 22px;
-      overflow: auto;
+      overflow: hidden;
     }
 
     .continuation > header,
@@ -268,6 +268,13 @@
     }
 
     .continuation > header { margin-bottom: 10px; }
+
+    .notes-page .scope-continued {
+      flex-shrink: 0;
+      margin-top: 22px;
+    }
+
+    .notes-page .scope-continued #details-continued { margin-top: 12px; }
 
     .notes-page .options-block { margin-top: 28px; }
 
@@ -1140,7 +1147,20 @@
       color: var(--blue);
     }
 
-    .print-photos { display: none; }
+    .print-photos {
+      display: none;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .print-photos img {
+      width: 72px;
+      height: 54px;
+      object-fit: cover;
+      display: block;
+      background: #eef3fa;
+    }
 
     .band {
       margin-top: 8px;
@@ -1327,12 +1347,17 @@
       color: var(--red);
     }
 
+    .continuation #details {
+      margin-top: 12px;
+    }
+
     .detail {
       margin-top: 6px;
       page-break-inside: avoid;
     }
 
-    .detail[hidden] { display: none !important; }
+    .detail[hidden],
+    .detail.parked { display: none !important; }
 
     .detail header {
       display: flex;
@@ -1348,12 +1373,63 @@
       flex: 0 0 auto;
     }
 
+    .detail-pick {
+      flex: 0 0 auto;
+      align-self: center;
+      width: 13px;
+      height: 13px;
+      margin: 0;
+      accent-color: var(--blue);
+    }
+
+    .bullet-tools { margin-top: 8px; }
+
+    .bullet-tools .text-btn { margin-top: 0; }
+
+    .bullet-hint {
+      margin: 4px 0 0;
+      font-size: 11px;
+      line-height: 1.35;
+      color: var(--muted);
+    }
+
+    .bullet-hint.warn {
+      color: var(--red);
+      font-weight: 700;
+    }
+
     .detail h3 {
       margin: 0;
       font-size: 12.5px;
       font-weight: 700;
       min-height: 1.2em;
       flex: 1;
+    }
+
+    .detail-title {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .detail-title h3 { flex: 0 1 auto; }
+
+    .title-x {
+      flex: 0 0 auto;
+      margin: 0;
+      border: 1px solid var(--red);
+      background: transparent;
+      color: var(--red);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-size: 9px;
+      line-height: 1;
+      cursor: pointer;
+      padding: 3px 6px 2px;
+      opacity: 1;
     }
 
     .pill {
@@ -1379,6 +1455,25 @@
 
     .detail li span[contenteditable] {
       display: inline;
+    }
+
+    .inch-blank {
+      display: inline-block;
+      min-width: 1.8em;
+      margin: 0 1px;
+      padding: 0 2px;
+      border-bottom: 1px solid var(--blue);
+      text-align: center;
+      font-weight: 700;
+      line-height: 1.1;
+      vertical-align: baseline;
+      cursor: text;
+    }
+
+    .inch-blank[data-empty="true"] {
+      color: var(--hint);
+      font-weight: 600;
+      letter-spacing: 0.04em;
     }
 
     .text-btn {
@@ -1446,7 +1541,19 @@
 
     .pdf-export input::placeholder { color: transparent; }
     .pdf-export select:has(option[value=""]:checked) { color: transparent; }
-    .pdf-export .thumb-delete { display: none !important; }
+    .pdf-export .inch-blank,
+    .pdf-export .inch-blank[data-empty="true"] {
+      color: inherit !important;
+      background: transparent !important;
+      box-shadow: none !important;
+    }
+    .pdf-export .print-photos { display: flex !important; }
+    .pdf-export .print-photos:empty { display: none !important; }
+    .pdf-export .thumb-delete,
+    .pdf-export .title-x,
+    .pdf-export .bullet-x,
+    .pdf-export .detail-pick,
+    .pdf-export .row-x { display: none !important; }
 
     @media print {
       body.printing-blank > .sheet { display: none !important; }
@@ -1459,10 +1566,15 @@
         flex-direction: column;
       }
       body { background: white; margin: 0; }
-      .noprint { display: none !important; }
-      .thumbs.noprint { display: flex !important; }
+      .noprint,
+      .title-x,
+      .bullet-x,
+      .detail-pick,
+      .row-x { display: none !important; }
       .thumb-delete { display: none !important; }
       .photo-count.noprint { display: block !important; }
+      .print-photos { display: flex !important; }
+      .print-photos:empty { display: none !important; }
       .sheet {
         width: 8.5in;
         height: 11in;
@@ -1493,18 +1605,15 @@
         background: transparent;
         box-shadow: none;
       }
+      .inch-blank,
+      .inch-blank[data-empty="true"] {
+        color: inherit !important;
+        background: transparent !important;
+        box-shadow: none !important;
+      }
       .detail { page-break-inside: avoid; }
-      .print-photos { display: none !important; }
       .logo { height: 120px; width: auto; max-width: 3.25in; }
       .logo-sm { height: 56px; width: auto; max-width: none; align-self: flex-start; object-fit: contain; }
-      .thumb-open { width: 72px; height: 54px; }
-      .thumb-open img {
-        width: 72px;
-        height: 54px;
-        max-width: 72px;
-        max-height: 54px;
-        object-fit: cover;
-      }
       * {
         print-color-adjust: exact;
         -webkit-print-color-adjust: exact;
@@ -1792,8 +1901,8 @@
               <input type="text" name="site2-architect" autocomplete="name" placeholder="Architect name">
             </label>
             <label class="field">
-              <span class="field-label">Approximate date</span>
-              <input type="date" name="site2-approx-date" aria-label="Approximate date">
+              <span class="field-label">Approximate start date</span>
+              <input type="date" name="site2-approx-date" aria-label="Approximate start date">
             </label>
             <label class="field">
               <span class="field-label">Finish date</span>
@@ -1867,7 +1976,10 @@
         <h2>Scope of Work</h2>
       </div>
       <div id="details"></div>
-      <button type="button" class="text-btn noprint" id="add-detail" hidden>Add detail section</button>
+      <div class="bullet-tools noprint" id="bullet-tools">
+        <button type="button" class="text-btn" id="add-bullet">Add bullet</button>
+        <p class="bullet-hint" id="bullet-hint">Check the box beside a scope section, then click Add bullet.</p>
+      </div>
     </div>
     <section class="block fixed">
       <div class="bar">Photos</div>
@@ -1926,6 +2038,16 @@
           <span class="k">Proposal</span>
           <span class="v proposal-mirror" data-placeholder="0000-00000" data-empty="true"></span>
         </div>
+      </div>
+    </div>
+    <div class="scope-continued" id="scope-continued" hidden>
+      <div class="scope-title-row">
+        <h2>Scope of Work</h2>
+      </div>
+      <div id="details-continued"></div>
+      <div class="bullet-tools noprint">
+        <button type="button" class="text-btn add-bullet">Add bullet</button>
+        <p class="bullet-hint">Check the box beside a scope section, then click Add bullet.</p>
       </div>
     </div>
     <section class="block fixed options-block">
@@ -2267,22 +2389,69 @@
   <script src="invoice-store.js"></script>
   <script>
     const scopeItems = [
-      "Mobilization & Setup",
       "Sinkhole Excavation & Sub-Base Inspection",
-      "Bump Milling",
+      "Base and/or Sub-Grade Installation",
+      "Bump Milling - Entire Back Parking Lot",
       "Car Stop Removal & Replacement",
       "Tack Coat Application",
       "Asphalt Installation",
-      "Pavement Striping – All Parking Lots",
+      "Seal Coating",
+      "Asphalt Repair",
+      "Pavement Striping - All Parking Lots",
       "Cleanup & Disposal"
     ];
 
+    const mobilizationBullets = [
+      "Includes transportation of all necessary equipment, crew mobilization and setup of safety barriers, lighting and signage.",
+      "Coordination with customer for access and staging"
+    ];
+
     const starterBullets = {
-      "Mobilization & Setup": [
-        "Includes transportation of all necessary equipment, crew mobilization, and setup of safety barriers, lighting, and signage.",
-        "Coordination with customer for access and staging."
-      ]
+      "Sinkhole Excavation & Sub-Base Inspection": [
+        "Saw cut and completely rip out all asphalt areas affected by sinkholes or severe deterioration.",
+        "Excavate to expose the sub-base and inspect conditions. Any unstable or compromised sub-base will be identified for replacement.",
+        "If new sub-base is required after inspection, it will be installed at an additional cost of $2.75 per sq. ft."
+      ],
+      "Base and/or Sub-Grade Installation": mobilizationBullets,
+      "Bump Milling - Entire Back Parking Lot": [
+        "Bump mill the entire back parking lot to correct high areas, smooth elevations and create proper transitions between asphalt and concrete surfaces.",
+        "All milled material will be removed and disposed of off-site. Milled surfaces will be swept clean to ensure optimal bonding."
+      ],
+      "Car Stop Removal & Replacement": [
+        "Remove, haul away, and properly dispose of all existing car bumpers. Furnish and install new precast concrete car bumpers, aligned and anchored according to industry standards to ensure consistency, durability and a uniform appearance across all lots."
+      ],
+      "Tack Coat Application": [
+        "Apply a uniform coat of asphalt emulsion tack to all milled and prepared surfaces prior to paving.",
+        "Tack coat will be applied at manufacturer-recommended rates to ensure strong adhesion between existing pavement and new asphalt."
+      ],
+      "Asphalt Installation": [
+        "Furnish and install ___ inches of hot mix asphalt across all designated areas, machine applied and rolled to a final compacted thickness of ___ inches.",
+        "Compaction will be performed using vibratory and static rollers to achieve proper density, smoothness and long-term durability."
+      ],
+      "Seal Coating": [
+        "Apply two coats of coal tar sealer meeting or exceeding federal specification RP-255-E",
+        "Both coats will contain \"Star Sealer,\" four Ibs. of silica sand per gallon and latex modifier."
+      ],
+      "Asphalt Repair": [
+        "Saw-cut square holes for proper appearance.",
+        "Remove failed asphalt and/or tree roots as necessary.",
+        "Patch full-depth with S-Ill hot-mix asphalt."
+      ],
+      "Pavement Striping - All Parking Lots": [
+        "Install all parking lines and markings with D.O.T. approved paint.",
+        "Paint all car-stops.",
+        "*Broken car-stops can be replaced for $200 per stop*"
+      ],
+      "Cleanup & Disposal": mobilizationBullets
     };
+
+    function loadScopeTemplate() {
+      scopeItems.forEach((item, i) => addCheck(item, {
+        bullets: starterBullets[item],
+        list: i < 8 ? "checks" : "checks-2"
+      }));
+      fillExtraList();
+    }
 
     function markEmpty(el) {
       el.dataset.empty = el.textContent.trim() ? "false" : "true";
@@ -2428,6 +2597,7 @@
         carousel.hidden = true;
         printPhotos.replaceChildren();
         closeLightbox();
+        scheduleFlow();
         return;
       }
       carousel.hidden = false;
@@ -2471,8 +2641,11 @@
         const printed = document.createElement("img");
         printed.src = photo.url;
         printed.alt = photo.name;
+        printed.width = 72;
+        printed.height = 54;
         printPhotos.append(printed);
       });
+      scheduleFlow();
     }
 
     photoInput.addEventListener("change", () => {
@@ -2625,20 +2798,23 @@
       remove.setAttribute("aria-label", "Remove line");
       remove.textContent = "×";
       let section = opts.slot ? null : addDetail(opts.title != null ? opts.title : label, opts.bullets);
+      if (section) li._section = section;
       if (opts.added) li.dataset.added = "true";
       if (opts.slot) li.dataset.slot = "true";
       function ensureDetail() {
         if (section) return section;
         section = addDetail(opts.title != null ? opts.title : text.textContent, opts.bullets);
+        li._section = section;
         section.hidden = !box.checked;
         return section;
       }
       remove.addEventListener("click", () => {
         if (lastAddedLine === li) lastAddedLine = null;
+        if (activeDetail === section) activeDetail = null;
         li.remove();
         if (section) section.remove();
-        syncDetailButton();
         if ((opts.list || "checks") === "checks-2") fillExtraList();
+        scheduleFlow();
       });
       li.append(box, text, remove);
       document.getElementById(opts.list || "checks").append(li);
@@ -2647,7 +2823,10 @@
       if (section) section.hidden = !box.checked;
       box.addEventListener("change", () => {
         if (box.checked || text.textContent.trim()) delete li.dataset.slot;
-        ensureDetail().hidden = !box.checked;
+        const detail = ensureDetail();
+        detail.hidden = !box.checked;
+        if (box.checked) activeDetail = detail;
+        scheduleFlow();
       });
       text.addEventListener("input", () => {
         if (text.textContent.trim()) delete li.dataset.slot;
@@ -2655,35 +2834,137 @@
         if (!heading) return;
         heading.textContent = text.textContent;
         markEmpty(heading);
+        scheduleFlow();
       });
       return li;
+    }
+
+    function parseInchBullet(text) {
+      const known = String(text || "").match(/^(Furnish and install )(_{2,}|[\d.]+)( inches of hot mix asphalt across all designated areas, machine applied and rolled to a final compacted thickness of )(_{2,}|[\d.]+)( inches\.?)$/);
+      if (known) {
+        return {
+          parts: [known[1], known[3], known[5]],
+          values: [known[2], known[4]].map((token) => (/^_+$/.test(token) ? "" : token))
+        };
+      }
+      if (!/_{2,}/.test(text || "")) return null;
+      const parts = String(text).split(/_{2,}/);
+      return { parts, values: parts.slice(1).map(() => "") };
+    }
+
+    function placeCaretEnd(el) {
+      const node = el.firstChild;
+      if (!node) return;
+      const range = document.createRange();
+      range.setStart(node, node.textContent.length);
+      range.collapse(true);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    }
+
+    function sanitizeInchBlank(blank) {
+      let value = blank.textContent.replace(/_/g, "").replace(/[^\d.]/g, "");
+      const dot = value.indexOf(".");
+      if (dot !== -1) value = value.slice(0, dot + 1) + value.slice(dot + 1).replace(/\./g, "");
+      value = value.slice(0, 6);
+      if (!value) {
+        if (blank.textContent !== "___") blank.textContent = "___";
+        blank.dataset.empty = "true";
+        return;
+      }
+      if (blank.textContent !== value) {
+        blank.textContent = value;
+        placeCaretEnd(blank);
+      }
+      blank.dataset.empty = "false";
+    }
+
+    function makeInchBlank(value) {
+      const blank = document.createElement("span");
+      blank.contentEditable = "true";
+      blank.className = "inch-blank";
+      blank.spellcheck = false;
+      blank.setAttribute("role", "textbox");
+      blank.setAttribute("aria-label", "Inches");
+      const filled = String(value || "").trim();
+      blank.textContent = filled || "___";
+      blank.dataset.empty = filled ? "false" : "true";
+      blank.addEventListener("focus", () => {
+        if (blank.dataset.empty === "true") {
+          const range = document.createRange();
+          range.selectNodeContents(blank);
+          const sel = window.getSelection();
+          sel.removeAllRanges();
+          sel.addRange(range);
+        }
+      });
+      blank.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") event.preventDefault();
+      });
+      blank.addEventListener("input", () => sanitizeInchBlank(blank));
+      blank.addEventListener("blur", () => {
+        const raw = blank.textContent.trim();
+        if (!raw || /^_+$/.test(raw)) {
+          blank.textContent = "___";
+          blank.dataset.empty = "true";
+          return;
+        }
+        if (raw.endsWith(".")) blank.textContent = raw.slice(0, -1);
+        blank.dataset.empty = "false";
+      });
+      return blank;
     }
 
     function addBullet(list, text) {
       const li = document.createElement("li");
       const span = document.createElement("span");
-      span.contentEditable = "true";
-      span.dataset.placeholder = "Describe what is included";
-      span.textContent = text || "";
+      const parsed = parseInchBullet(text);
+      if (parsed) {
+        span.className = "bullet-line";
+        parsed.parts.forEach((part, index) => {
+          if (part) span.append(document.createTextNode(part));
+          if (index < parsed.values.length) span.append(makeInchBlank(parsed.values[index]));
+        });
+      } else {
+        span.contentEditable = "true";
+        span.dataset.placeholder = "Describe what is included";
+        span.textContent = text || "";
+        watch(span);
+      }
       const remove = document.createElement("button");
       remove.type = "button";
       remove.className = "bullet-x noprint";
       remove.setAttribute("aria-label", "Remove bullet");
       remove.textContent = "×";
-      remove.addEventListener("click", () => li.remove());
+      remove.addEventListener("click", () => {
+        li.remove();
+        scheduleFlow();
+      });
       li.append(span, document.createTextNode(" "), remove);
       list.append(li);
-      watch(span);
     }
 
     function addDetail(title, bullets) {
       const section = document.createElement("section");
       section.className = "detail";
       const header = document.createElement("header");
+      const pick = document.createElement("input");
+      pick.type = "checkbox";
+      pick.className = "detail-pick noprint";
+      pick.setAttribute("aria-label", "Select this section to add a bullet");
       const h3 = document.createElement("h3");
       h3.contentEditable = "true";
       h3.dataset.placeholder = "Section title";
       h3.textContent = title || "";
+      const titleX = document.createElement("button");
+      titleX.type = "button";
+      titleX.className = "title-x noprint";
+      titleX.setAttribute("aria-label", "Remove scope section");
+      titleX.textContent = "Remove";
+      const titleLine = document.createElement("div");
+      titleLine.className = "detail-title";
+      titleLine.append(h3, titleX);
       const pill = document.createElement("span");
       pill.className = "pill";
       pill.textContent = "Included";
@@ -2692,12 +2973,25 @@
       const lines = bullets && bullets.length ? bullets : [""];
       lines.forEach((line) => addBullet(ul, line));
 
-      const add = document.createElement("button");
-      add.type = "button";
-      add.className = "text-btn noprint";
-      add.textContent = "Add bullet";
-      add.addEventListener("click", () => addBullet(ul, ""));
-      header.append(h3, add, pill);
+      header.append(pick, titleLine, pill);
+      titleX.addEventListener("click", () => {
+        const li = [...document.querySelectorAll("#checks > li, #checks-2 > li")].find((item) => item._section === section);
+        const rowX = li && li.querySelector(".row-x");
+        if (rowX) {
+          rowX.click();
+          return;
+        }
+        if (activeDetail === section) activeDetail = null;
+        section.remove();
+        scheduleFlow();
+      });
+      pick.addEventListener("change", () => {
+        document.querySelectorAll(".detail-pick").forEach((box) => {
+          if (box !== pick) box.checked = false;
+        });
+        activeDetail = pick.checked ? section : (activeDetail === section ? null : activeDetail);
+        if (pick.checked) document.querySelectorAll(".bullet-hint").forEach((hint) => hint.classList.remove("warn"));
+      });
 
       section.append(header, ul);
       document.getElementById("details").append(section);
@@ -2706,6 +3000,7 @@
     }
 
     let lastAddedLine = null;
+    let activeDetail = null;
 
     function fillExtraList() {
       const list = document.getElementById("checks-2");
@@ -2714,14 +3009,119 @@
       for (let i = rows; i < 8; i++) addCheck("", { list: "checks-2", slot: true });
     }
 
-    scopeItems.forEach((item) => addCheck(item, { bullets: starterBullets[item] }));
-    fillExtraList();
+    loadScopeTemplate();
 
-    function syncDetailButton() {
-      const button = document.getElementById("add-detail");
-      if (!button) return;
-      button.hidden = !document.querySelector("#checks li[data-added], #checks-2 li[data-added]");
+    let flowFrame = 0;
+
+    function shownDetails() {
+      return [...document.querySelectorAll("#details .detail, #details-continued .detail")].filter((section) => {
+        return !section.hidden && !section.classList.contains("parked");
+      });
     }
+
+    function measureSheet(sheet, fn) {
+      const shown = getComputedStyle(sheet).display !== "none";
+      if (shown) return fn();
+      const snapshot = sheet.getAttribute("style");
+      sheet.style.display = "flex";
+      sheet.style.flexDirection = "column";
+      sheet.style.position = "absolute";
+      sheet.style.visibility = "hidden";
+      sheet.style.left = "-10000px";
+      sheet.style.top = "0";
+      sheet.style.height = "11in";
+      sheet.style.width = "8.5in";
+      sheet.style.overflow = "hidden";
+      try {
+        return fn();
+      } finally {
+        if (snapshot == null) sheet.removeAttribute("style");
+        else sheet.setAttribute("style", snapshot);
+      }
+    }
+
+    function flowScopeDetails() {
+      const detailsHost = document.getElementById("details");
+      const continuedHost = document.getElementById("details-continued");
+      const continuedWrap = document.getElementById("scope-continued");
+      const page2 = document.querySelector("article.continuation");
+      const page3 = document.querySelector("article.notes-page");
+      const button = document.getElementById("add-bullet");
+      if (!detailsHost || !continuedHost || !page2 || !page3 || !button) return;
+      const selection = window.getSelection();
+      let caret = null;
+      if (selection && selection.rangeCount) {
+        const node = selection.anchorNode;
+        const el = node && (node.nodeType === 1 ? node : node.parentElement);
+        if (el && el.closest && el.closest(".detail")) caret = { node: selection.anchorNode, offset: selection.anchorOffset };
+      }
+      const sections = [];
+      document.querySelectorAll("#checks > li, #checks-2 > li").forEach((li) => {
+        if (li._section && li._section.isConnected) sections.push(li._section);
+      });
+      sections.forEach((section) => section.classList.remove("parked"));
+      const visible = sections.filter((section) => !section.hidden);
+      sections.filter((section) => section.hidden).forEach((section) => detailsHost.append(section));
+
+      const overflow = [];
+      measureSheet(page2, () => {
+        visible.forEach((section) => detailsHost.append(section));
+        const body = page2.querySelector(".sheet-body");
+        const tools = document.getElementById("bullet-tools");
+        const limit = body.getBoundingClientRect().bottom - (tools ? tools.offsetHeight : button.offsetHeight) - 8;
+        visible.forEach((section) => {
+          if (overflow.length || section.getBoundingClientRect().bottom > limit + 1) overflow.push(section);
+        });
+      });
+
+      const placed = [];
+      const parked = [];
+      measureSheet(page3, () => {
+        continuedHost.replaceChildren();
+        continuedWrap.hidden = true;
+        if (!overflow.length) return;
+        continuedWrap.hidden = false;
+        overflow.forEach((section) => {
+          if (parked.length) {
+            parked.push(section);
+            return;
+          }
+          continuedHost.append(section);
+          if (page3.scrollHeight > page3.clientHeight + 1) {
+            section.remove();
+            parked.push(section);
+          } else {
+            placed.push(section);
+          }
+        });
+        if (!placed.length) continuedWrap.hidden = true;
+      });
+      parked.forEach((section) => {
+        section.classList.add("parked");
+        continuedHost.append(section);
+      });
+      if (!placed.length) continuedWrap.hidden = true;
+      if (caret && caret.node.isConnected) {
+        const sel = window.getSelection();
+        const range = document.createRange();
+        const max = caret.node.nodeType === 3 ? caret.node.textContent.length : caret.node.childNodes.length;
+        range.setStart(caret.node, Math.min(caret.offset, max));
+        range.collapse(true);
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+    }
+
+    function scheduleFlow() {
+      cancelAnimationFrame(flowFrame);
+      flowFrame = requestAnimationFrame(flowScopeDetails);
+    }
+
+    document.addEventListener("input", (event) => {
+      if (event.target.closest && event.target.closest(".detail")) scheduleFlow();
+    });
+
+    flowScopeDetails();
 
     document.getElementById("add-line").addEventListener("click", () => {
       const slot = document.querySelector("#checks-2 li[data-slot='true']");
@@ -2732,20 +3132,31 @@
       } else {
         lastAddedLine = addCheck("", { added: true, list: "checks-2" });
       }
-      syncDetailButton();
       const text = lastAddedLine.querySelector("[contenteditable]");
       if (text) text.focus();
     });
 
-    document.getElementById("add-detail").addEventListener("click", () => {
-      const added = [...document.querySelectorAll("#checks li[data-added], #checks-2 li[data-added]")];
-      const line = lastAddedLine && lastAddedLine.isConnected ? lastAddedLine : added[added.length - 1];
-      if (!line) return;
-      lastAddedLine = line;
-      const box = line.querySelector('input[type="checkbox"]');
-      if (!box) return;
-      box.checked = true;
-      box.dispatchEvent(new Event("change"));
+    function addBulletToSelected() {
+      const pick = document.querySelector(".detail-pick:checked");
+      const section = pick ? pick.closest(".detail") : null;
+      const hints = document.querySelectorAll(".bullet-hint");
+      if (!section || section.hidden || section.classList.contains("parked")) {
+        hints.forEach((hint) => hint.classList.add("warn"));
+        return;
+      }
+      hints.forEach((hint) => hint.classList.remove("warn"));
+      activeDetail = section;
+      const list = section.querySelector("ul");
+      addBullet(list, "");
+      flowScopeDetails();
+      const fields = list.querySelectorAll("[contenteditable]");
+      const field = fields[fields.length - 1];
+      if (field) field.focus();
+    }
+
+    document.getElementById("add-bullet").addEventListener("click", addBulletToSelected);
+    document.querySelectorAll(".add-bullet").forEach((button) => {
+      button.addEventListener("click", addBulletToSelected);
     });
     const outputToggle = document.getElementById("output-toggle");
     const outputPanel = document.getElementById("output-panel");
@@ -2832,6 +3243,8 @@
       if (carousel) carousel.hidden = true;
       const thumbs = root.querySelector("#photo-thumbs");
       if (thumbs) thumbs.replaceChildren();
+      const printed = root.querySelector("#print-photos");
+      if (printed) printed.replaceChildren();
       const count = root.querySelector("#photo-count");
       if (count) count.textContent = "";
     }
@@ -2843,6 +3256,10 @@
       document.querySelectorAll(".sheet").forEach((sheet) => {
         const copy = sheet.cloneNode(true);
         blankCopy(copy);
+        copy.querySelectorAll(".noprint, .title-x, .bullet-x, .detail-pick, .row-x").forEach((el) => {
+          if (el.classList.contains("photo-count")) return;
+          el.remove();
+        });
         copy.style.margin = "0";
         copy.style.boxShadow = "none";
         host.append(copy);
@@ -2918,15 +3335,27 @@
       return true;
     }
 
+    function whenPrintPhotosReady(root) {
+      return Promise.all(Array.from(root.querySelectorAll(".print-photos img")).map((img) => {
+        if (typeof img.decode === "function") return img.decode().catch(() => {});
+        if (img.complete) return Promise.resolve();
+        return new Promise((resolve) => {
+          img.addEventListener("load", () => resolve(), { once: true });
+          img.addEventListener("error", () => resolve(), { once: true });
+        });
+      }));
+    }
+
     function mountExport(blank) {
+      flowScopeDetails();
       const host = document.createElement("div");
       host.className = "pdf-export";
       document.querySelectorAll(".sheet").forEach((sheet) => {
         const copy = sheet.cloneNode(true);
         copyLiveFields(sheet, copy);
         if (blank) blankCopy(copy);
-        copy.querySelectorAll(".noprint").forEach((el) => {
-          if (el.classList.contains("thumbs") || el.classList.contains("photo-count")) return;
+        copy.querySelectorAll(".noprint, .title-x, .bullet-x, .detail-pick, .row-x").forEach((el) => {
+          if (el.classList.contains("photo-count")) return;
           el.remove();
         });
         copy.style.margin = "0";
@@ -2975,7 +3404,7 @@
       const filename = blank ? "Invoice-blank.pdf" : "Invoice-" + number + ".pdf";
       const button = document.getElementById("download-invoice");
       button.disabled = true;
-      html2pdf().set(pdfOptions(number)).from(host).outputPdf("blob").then((blob) => {
+      whenPrintPhotosReady(host).then(() => html2pdf().set(pdfOptions(number)).from(host).outputPdf("blob")).then((blob) => {
         downloadBlob(blob, filename);
       }).catch(() => {
       }).then(() => {
@@ -3017,10 +3446,11 @@
       document.getElementById("checks").replaceChildren();
       document.getElementById("checks-2").replaceChildren();
       document.getElementById("details").replaceChildren();
-      scopeItems.forEach((item) => addCheck(item, { bullets: starterBullets[item] }));
-      fillExtraList();
-      syncDetailButton();
+      document.getElementById("details-continued").replaceChildren();
+      document.getElementById("scope-continued").hidden = true;
+      loadScopeTemplate();
       setText(document.getElementById("coordination"), "Project Coordination");
+      flowScopeDetails();
     }
 
     function resetForm() {
@@ -3094,10 +3524,17 @@
           checked: li.querySelector("input").checked,
           added: li.dataset.added === "true"
         })),
-        details: [...document.querySelectorAll("#details .detail")].map((section) => ({
-          title: section.querySelector("h3").textContent,
-          bullets: [...section.querySelectorAll("li [contenteditable]")].map((span) => span.textContent)
-        })),
+        details: [...document.querySelectorAll("#checks li, #checks-2 li")].filter((li) => {
+          const label = li.querySelector("[contenteditable]").textContent.trim();
+          const checked = li.querySelector("input").checked;
+          return li.dataset.slot !== "true" || label || checked;
+        }).map((li) => {
+          const section = li._section;
+          return {
+            title: section ? section.querySelector("h3").textContent : "",
+            bullets: section ? [...section.querySelectorAll("ul > li > span")].map((span) => span.textContent.replace(/\s+/g, " ").trim()) : []
+          };
+        }),
         photos: photos.filter((photo) => photo.blob).map((photo) => ({
           name: photo.name,
           blob: photo.blob
@@ -3150,6 +3587,8 @@
       document.getElementById("checks").replaceChildren();
       document.getElementById("checks-2").replaceChildren();
       document.getElementById("details").replaceChildren();
+      document.getElementById("details-continued").replaceChildren();
+      document.getElementById("scope-continued").hidden = true;
       const savedChecks = record.checks || [];
       const savedDetails = record.details || [];
       const count = Math.max(savedChecks.length, savedDetails.length);
@@ -3166,7 +3605,9 @@
       }
       fillExtraList();
       lastAddedLine = document.querySelector("#checks-2 li[data-added]:last-child, #checks li[data-added]:last-child");
-      syncDetailButton();
+      flowScopeDetails();
+      const shown = shownDetails();
+      activeDetail = shown[shown.length - 1] || null;
       clearPhotos();
       (record.photos || []).forEach((photo) => {
         if (!photo.blob) return;
@@ -3195,7 +3636,7 @@
           "Work to be performed at:",
           [fieldValue("site2-street"), fieldValue("site2-suite"), fieldValue("site2-city"), fieldValue("site2-state"), fieldValue("site2-zip")].filter(Boolean).join(", "),
           fieldValue("site2-architect"),
-          fieldValue("site2-approx-date") ? "Approximate date: " + fieldValue("site2-approx-date") : "",
+          fieldValue("site2-approx-date") ? "Approximate start date: " + fieldValue("site2-approx-date") : "",
           fieldValue("site2-finish-date") ? "Finish date: " + fieldValue("site2-finish-date") : "",
           fieldValue("site2-contact")
         ] : []),
@@ -3244,6 +3685,7 @@
       button.textContent = "Opening";
       let blob = null;
       try {
+        await whenPrintPhotosReady(host);
         blob = await html2pdf().set(pdfOptions(number)).from(host).outputPdf("blob");
         const file = new File([blob], filename, { type: "application/pdf" });
         if (navigator.canShare && navigator.canShare({ files: [file] })) {
