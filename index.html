@@ -2408,14 +2408,15 @@
   <script src="invoice-store.js"></script>
   <script>
     const scopeItems = [
+      "Mobilization & Setup",
       "Sinkhole Excavation & Sub-Base Inspection",
       "Base and/or Sub-Grade Installation",
       "Bump Milling - Entire Back Parking Lot",
       "Car Stop Removal & Replacement",
       "Tack Coat Application",
       "Asphalt Installation",
-      "Seal Coating",
       "Asphalt Repair",
+      "Seal Coating",
       "Pavement Striping - All Parking Lots",
       "Cleanup & Disposal"
     ];
@@ -2426,6 +2427,10 @@
     ];
 
     const starterBullets = {
+      "Mobilization & Setup": [
+        "Includes transportation of all necessary equipment, crew mobilization, and setup of safety barriers, lighting, and signage.",
+        "Coordination with customer for access and staging"
+      ],
       "Sinkhole Excavation & Sub-Base Inspection": [
         "Saw cut and completely rip out all asphalt areas affected by sinkholes or severe deterioration.",
         "Excavate to expose the sub-base and inspect conditions. Any unstable or compromised sub-base will be identified for replacement.",
@@ -3608,8 +3613,15 @@
       document.getElementById("details").replaceChildren();
       document.getElementById("details-continued").replaceChildren();
       document.getElementById("scope-continued").hidden = true;
-      const savedChecks = record.checks || [];
-      const savedDetails = record.details || [];
+      let savedChecks = record.checks || [];
+      let savedDetails = record.details || [];
+      const mobilizationTitle = "Mobilization & Setup";
+      const hasMobilization = savedChecks.some((item) => (item.label || "").trim() === mobilizationTitle)
+        || savedDetails.some((item) => (item.title || "").trim() === mobilizationTitle);
+      if (!hasMobilization && (savedChecks.length || savedDetails.length)) {
+        savedChecks = [{ label: mobilizationTitle, checked: false, added: false }, ...savedChecks];
+        savedDetails = [{ title: mobilizationTitle, bullets: starterBullets[mobilizationTitle] }, ...savedDetails];
+      }
       const count = Math.max(savedChecks.length, savedDetails.length);
       for (let i = 0; i < count; i++) {
         const check = savedChecks[i] || {};
