@@ -850,6 +850,39 @@
 
     .info-row + .info-row { margin-top: 16px; }
 
+    .site-card {
+      background: white;
+      border: 1px solid #d5deee;
+    }
+
+    .site-toggle {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border: 0;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .site-toggle .caret {
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 6px solid white;
+    }
+
+    .site-card.is-collapsed .site-toggle .caret {
+      border-top: 0;
+      border-bottom: 6px solid white;
+    }
+
+    .site-print-title { display: none; }
+
+    .site-card.is-collapsed .info-fields { display: none; }
+
     .info-fields {
       display: grid;
       gap: 4px;
@@ -1569,6 +1602,8 @@
     .pdf-export .bullet-x,
     .pdf-export .detail-pick,
     .pdf-export .row-x { display: none !important; }
+    .pdf-export .site-card.is-collapsed { display: none !important; }
+    .pdf-export .site-card:not(.is-collapsed) .site-print-title { display: inline-block; }
 
     @media print {
       body.printing-blank > .sheet { display: none !important; }
@@ -1590,6 +1625,8 @@
       .photo-count.noprint { display: block !important; }
       .print-photos { display: flex !important; }
       .print-photos:empty { display: none !important; }
+      .site-card.is-collapsed { display: none !important; }
+      .site-card:not(.is-collapsed) .site-print-title { display: inline-block; }
       .sheet {
         width: 8.5in;
         height: 11in;
@@ -1832,9 +1869,13 @@
           </div>
         </div>
       </div>
-      <div class="info-row">
-        <div class="bar">Work to be performed at:</div>
-        <div class="info-fields">
+      <div class="info-row site-card is-collapsed" id="site-card">
+        <button type="button" class="bar site-toggle noprint" id="site-toggle" aria-expanded="false" aria-controls="site-fields">
+          <span>Work to be performed at:</span>
+          <span class="caret" aria-hidden="true"></span>
+        </button>
+        <div class="bar site-print-title">Work to be performed at:</div>
+        <div class="info-fields" id="site-fields">
           <div class="address-line">
             <label class="field">
               <span class="field-label">Address</span>
@@ -2557,6 +2598,23 @@
           if (typeof input.showPicker === "function") input.showPicker();
         } catch (err) {}
       });
+    });
+
+    function siteCardOpen() {
+      const card = document.getElementById("site-card");
+      return !!(card && !card.classList.contains("is-collapsed"));
+    }
+
+    function setSiteOpen(open) {
+      const card = document.getElementById("site-card");
+      const toggle = document.getElementById("site-toggle");
+      if (!card || !toggle) return;
+      card.classList.toggle("is-collapsed", !open);
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    }
+
+    document.getElementById("site-toggle").addEventListener("click", () => {
+      setSiteOpen(!siteCardOpen());
     });
 
     const projectPhone = document.getElementById("project-phone");
@@ -3493,6 +3551,7 @@
       resetScopeTemplate();
       const billing = document.getElementById("billing-differs");
       if (billing) billing.checked = false;
+      setSiteOpen(false);
       syncPageHeader();
     }
 
@@ -3519,6 +3578,7 @@
         site2ApproxDate: fieldValue("site2-approx-date"),
         site2FinishDate: fieldValue("site2-finish-date"),
         site2Contact: fieldValue("site2-contact"),
+        siteOpen: siteCardOpen(),
         proposal: readText("proposal-no"),
         scope: readText("scope-text"),
         options: readText("options-text"),
@@ -3588,6 +3648,8 @@
       setField("site2-approx-date", record.site2ApproxDate);
       setField("site2-finish-date", record.site2FinishDate);
       setField("site2-contact", record.site2Contact);
+      const siteFilled = ["site2-street", "site2-suite", "site2-city", "site2-state", "site2-zip", "site2-architect", "site2-approx-date", "site2-finish-date", "site2-contact"].some((name) => fieldValue(name).trim());
+      setSiteOpen(record.siteOpen != null ? !!record.siteOpen : siteFilled);
       setText(document.getElementById("proposal-no"), record.proposal);
       setText(document.getElementById("scope-text"), record.scope);
       setText(document.getElementById("options-text"), record.options);
@@ -3661,7 +3723,7 @@
         "Address: " + address,
         "Phone: " + fieldValue("phone"),
         "Email: " + fieldValue("client-email"),
-        ...(fieldValue("site2-street").trim() ? [
+        ...(siteCardOpen() ? [
           "",
           "Work to be performed at:",
           [fieldValue("site2-street"), fieldValue("site2-suite"), fieldValue("site2-city"), fieldValue("site2-state"), fieldValue("site2-zip")].filter(Boolean).join(", "),
