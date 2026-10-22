@@ -2421,11 +2421,6 @@
       "Cleanup & Disposal"
     ];
 
-    const mobilizationBullets = [
-      "Includes transportation of all necessary equipment, crew mobilization and setup of safety barriers, lighting and signage.",
-      "Coordination with customer for access and staging"
-    ];
-
     const starterBullets = {
       "Mobilization & Setup": [
         "Includes transportation of all necessary equipment, crew mobilization, and setup of safety barriers, lighting, and signage.",
@@ -2436,13 +2431,15 @@
         "Excavate to expose the sub-base and inspect conditions. Any unstable or compromised sub-base will be identified for replacement.",
         "If new sub-base is required after inspection, it will be installed at an additional cost of $2.75 per sq. ft."
       ],
-      "Base and/or Sub-Grade Installation": mobilizationBullets,
+      "Base and/or Sub-Grade Installation": [
+        "Compact Sub-Grade to 95% AASHTO, install ___ inches of compacted base material to 98% AASHTO"
+      ],
       "Bump Milling - Entire Back Parking Lot": [
         "Bump mill the entire back parking lot to correct high areas, smooth elevations and create proper transitions between asphalt and concrete surfaces.",
         "All milled material will be removed and disposed of off-site. Milled surfaces will be swept clean to ensure optimal bonding."
       ],
       "Car Stop Removal & Replacement": [
-        "Remove, haul away, and properly dispose of all existing car bumpers. Furnish and install new precast concrete car bumpers, aligned and anchored according to industry standards to ensure consistency, durability and a uniform appearance across all lots."
+        "Remove, haul away, and properly dispose of all existing car bumpers. Can be replaced at $200 per stop. Furnish and install new precast concrete car bumpers, aligned and anchored according to industry standards to ensure consistency, durability and a uniform appearance across all lots."
       ],
       "Tack Coat Application": [
         "Apply a uniform coat of asphalt emulsion tack to all milled and prepared surfaces prior to paving.",
@@ -2450,7 +2447,7 @@
       ],
       "Asphalt Installation": [
         "Furnish and install ___ inches of hot mix asphalt across all designated areas, machine applied and rolled to a final compacted thickness of ___ inches.",
-        "Compaction will be performed using vibratory and static rollers to achieve proper density, smoothness and long-term durability."
+        "Compaction will be performed using 3-5 vibratory and static rollers to achieve proper density, smoothness and long-term durability."
       ],
       "Seal Coating": [
         "Apply two coats of coal tar sealer meeting or exceeding federal specification RP-255-E",
@@ -2466,7 +2463,9 @@
         "Paint all car-stops.",
         "*Broken car-stops can be replaced for $200 per stop*"
       ],
-      "Cleanup & Disposal": mobilizationBullets
+      "Cleanup & Disposal": [
+        "Upon completion of work, sweep and clean all paved areas. Remove and haul away all debris, spoils, and waste material from the site. The work area will be left clean, orderly, and ready for immediate use."
+      ]
     };
 
     function loadScopeTemplate() {
